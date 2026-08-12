@@ -50,3 +50,23 @@ test("the viewer keeps navigation minimal without an external PDF button", async
   );
   assert.doesNotMatch(component, /PDF öffnen/);
 });
+
+test("paired pages touch with one grey divider inside a black outline", async () => {
+  const styles = await readFile(
+    path.resolve(
+      path.dirname(fileURLToPath(import.meta.url)),
+      "../src/components/PdfViewer/PdfViewer.scss"
+    ),
+    "utf8"
+  );
+  assert.match(styles, /\.pdf-viewer__stage\s*{[^}]*gap:\s*0;/s);
+  assert.match(styles, /\.pdf-viewer__page\s*{[^}]*border:\s*1px solid var\(--ink\);/s);
+  assert.match(
+    styles,
+    /data-page-count="2"[^}]*\.pdf-viewer__page:first-child\s*{[^}]*border-inline-end-color:\s*var\(--line\);/s
+  );
+  assert.match(
+    styles,
+    /data-page-count="2"[^}]*\.pdf-viewer__page \+ \.pdf-viewer__page\s*{[^}]*border-inline-start:\s*0;/s
+  );
+});

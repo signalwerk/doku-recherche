@@ -7,7 +7,7 @@
 .pdf-viewer__stage {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(0.35rem, 1.5vw, 1.25rem);
+  gap: 0;
   align-items: center;
   width: 100%;
 }
@@ -20,9 +20,21 @@
 .pdf-viewer__page {
   min-width: 0;
   overflow: hidden;
-  border: 1px solid var(--line);
+  border: 1px solid var(--ink);
   background: var(--paper-pure);
   box-shadow: 0 0.2rem 0.8rem rgb(21 21 20 / 10%);
+}
+
+.pdf-viewer__stage[data-page-count="2"] .pdf-viewer__page {
+  box-shadow: none;
+}
+
+.pdf-viewer__stage[data-page-count="2"] .pdf-viewer__page:first-child {
+  border-inline-end-color: var(--line);
+}
+
+.pdf-viewer__stage[data-page-count="2"] .pdf-viewer__page + .pdf-viewer__page {
+  border-inline-start: 0;
 }
 
 .pdf-viewer__page[hidden] {
