@@ -71,3 +71,18 @@ test("selected and marked text is white on black", async () => {
     /mark\s*{\s*color:\s*var\(--paper-pure\);\s*background:\s*var\(--ink\);\s*}/
   );
 });
+
+test("all anchors share the black underline and red hover treatment", async () => {
+  const globalStyles = await readFile(
+    path.join(sourceRoot, "styles/_global.scss"),
+    "utf8"
+  );
+  assert.match(
+    globalStyles,
+    /a\s*{\s*color:\s*var\(--ink\);\s*text-decoration-color:\s*currentColor;\s*text-decoration-line:\s*underline;\s*text-decoration-thickness:\s*0\.1em;\s*text-underline-offset:\s*0\.22em;\s*}/
+  );
+  assert.match(
+    globalStyles,
+    /a:hover\s*{\s*color:\s*var\(--accent\);\s*text-decoration-color:\s*currentColor;\s*}/
+  );
+});

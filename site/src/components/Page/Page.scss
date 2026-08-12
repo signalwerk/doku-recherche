@@ -17,16 +17,10 @@
 
 .site-header__title {
   margin: 0;
-  color: var(--ink);
   font-size: clamp(0.85rem, 1.5vw, 1rem);
   font-weight: 700;
   line-height: 1.25;
   letter-spacing: 0;
-  text-decoration: none;
-}
-
-.site-header__title:hover {
-  color: var(--accent);
 }
 
 .page__content {
@@ -71,9 +65,4 @@
 
 .site-footer p {
   margin: 0;
-}
-
-.site-footer a {
-  color: inherit;
-  text-underline-offset: 0.16em;
 }

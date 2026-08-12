@@ -1,5 +1,3 @@
-@use "sass:color";
-
 @font-face {
   font-family: "Geist";
   font-style: normal;
@@ -84,9 +82,11 @@ svg {
 }
 
 a {
-  color: var(--accent);
-  text-decoration-color: color.change(#b92822, $alpha: 0.45);
-  text-underline-offset: 0.16em;
+  color: var(--ink);
+  text-decoration-color: currentColor;
+  text-decoration-line: underline;
+  text-decoration-thickness: 0.1em;
+  text-underline-offset: 0.22em;
 }
 
 a:hover {
@@ -126,8 +126,7 @@ mark {
   top: 0.75rem;
   left: 0.75rem;
   padding: 0.65rem 0.85rem;
-  color: var(--paper-pure);
-  background: var(--accent);
+  background: var(--paper-pure);
   font-weight: 700;
   transform: translateY(calc(-100% - 1rem));
 }
@@ -158,14 +157,6 @@ mark {
 
 .site-shell-navigation a {
   white-space: nowrap;
-  text-decoration: none;
-}
-
-.site-shell-navigation a[aria-current="page"] {
-  color: var(--ink);
-  text-decoration: underline;
-  text-decoration-color: var(--accent);
-  text-decoration-thickness: 2px;
 }
 
 @media (prefers-reduced-motion: reduce) {
