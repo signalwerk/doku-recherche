@@ -2,9 +2,9 @@
 
 :root {
   color-scheme: light;
-  --paper: #f2efe8;
-  --paper-pure: #fbfaf6;
-  --paper-soft: #e7e2d8;
+  --paper: #fff;
+  --paper-pure: #fff;
+  --paper-soft: #efefec;
   --ink: #151514;
   --ink-soft: #5b5954;
   --line: #a9a39a;
@@ -35,9 +35,7 @@ body {
   min-height: 100vh;
   margin: 0;
   color: var(--ink);
-  background:
-    radial-gradient(circle at 12% 2%, rgb(255 255 255 / 56%), transparent 32rem),
-    var(--paper);
+  background: var(--paper);
 }
 
 body,
@@ -72,6 +70,17 @@ a:hover {
 ::selection {
   color: var(--paper-pure);
   background: var(--accent-dark);
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
 }
 
 .skip-link {
@@ -178,19 +187,6 @@ a:hover {
   text-transform: uppercase;
 }
 
-.page__heading {
-  display: grid;
-  grid-template-columns: minmax(8rem, 1fr) minmax(0, 3fr);
-  gap: clamp(1.25rem, 3.5vw, 4rem);
-  align-items: start;
-  padding: clamp(4rem, 9vw, 8.5rem) 0 clamp(3rem, 6vw, 6rem);
-}
-
-.page__heading > .eyebrow {
-  padding-top: 0.8rem;
-}
-
-.page__heading h1,
 .shortcut h1,
 .file-card h1 {
   width: min(16ch, 100%);
@@ -208,7 +204,7 @@ a:hover {
 
 .page__content {
   display: flow-root;
-  padding-bottom: clamp(5rem, 9vw, 10rem);
+  padding: clamp(3rem, 6vw, 6rem) 0 clamp(5rem, 9vw, 10rem);
 }
 
 .page--wide .page__content {
@@ -217,6 +213,29 @@ a:hover {
 
 .page__content > * + * {
   margin-top: clamp(2rem, 5vw, 5rem);
+}
+
+.page__content > .media-figure:first-child {
+  width: min(10rem, 42vw);
+  margin-right: auto;
+  margin-left: 0;
+}
+
+.page__content > .media-figure:first-child .media-figure__frame {
+  background: transparent;
+}
+
+.page__content > .media-figure:first-child + [data-renderer-type="title"] {
+  max-width: var(--measure);
+  margin-right: auto;
+  margin-left: 0;
+  font-size: clamp(1.55rem, 2.6vw, 2.7rem);
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+}
+
+.content-grid h2 {
+  font-size: clamp(2rem, 3.5vw, 3.8rem);
 }
 
 .page__content > :is(h1, h2, h3, h4, h5, h6, .prose, .eyebrow) {
@@ -620,15 +639,6 @@ h6 {
     text-align: right;
   }
 
-  .page__heading {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 1rem;
-  }
-
-  .page__heading > .eyebrow {
-    padding-top: 0;
-  }
-
   .content-column {
     grid-column: 1 / -1;
   }
@@ -643,7 +653,6 @@ h6 {
     grid-template-columns: 1fr;
   }
 
-  .page__heading h1,
   .shortcut h1,
   .file-card h1 {
     word-break: break-word;

@@ -88,10 +88,7 @@ function Page({
         <div className="site-header__rule" aria-hidden="true" />
         <p className="site-header__descriptor">Dokumente · Kontexte · Spuren</p>
       </header>
-      <div className="page__heading">
-        <p className="eyebrow">Dokumentationsstelle</p>
-        <h1>{title}</h1>
-      </div>
+      <h1 className="visually-hidden">{title}</h1>
       <div className="page__content" data-slot="content">
         {slots.content}
       </div>

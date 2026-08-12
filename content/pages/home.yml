@@ -9,25 +9,119 @@ properties:
   navigation_title: Startseite
   hidden: false
   hide_in_navigation: false
-  description: Dokumentationsstelle für historische Recherchen in Zürich.
-  keywords: Geschichte, Recherche, Dokumentation, Zürich
+  description: >-
+    Recherchen und Dokumentationen zur sozialistischen Arbeiterbewegung mit Schwerpunkt Schweiz.
+  keywords: >-
+    Sozialistische Arbeiterbewegung, Schweiz, revolutionäre Literatur, Verlagswesen,
+    Oktoberrevolution
   noindex: false
   nofollow: false
   layout: default
 slots:
   content:
-    - id: 8tqio8epg0x01kl
+    - id: qncmoitpckatyji
+      type: image
+      properties:
+        asset: r89qotjp2wej1r8
+        alt: ""
+        caption: ""
+        ratio: original
+        hidden: false
+      slots: {}
+    - id: yayvxwayuq5n0vh
       type: title
       properties:
-        title: Geschichte recherchieren, dokumentieren und zugänglich machen
+        title: Dokumentationsstelle für geschichtliche Recherchen, Christof P. Manz, Zürich
         element: h2
         hidden: false
       slots: {}
-    - id: mnu7f3bvgq19kum
-      type: text
+    - id: i2fuqyzq6n07c5a
+      type: grid
       properties:
-        text: >-
-          Diese Website befindet sich im Aufbau. Inhalte können direkt mit miniCMS bearbeitet und
-          als statische Seiten veröffentlicht werden.
+        layout: default
         hidden: false
-      slots: {}
+      slots:
+        columns:
+          - id: 75axubjjxils6b0
+            type: column
+            properties:
+              width: "5"
+              start: "1"
+              hidden: false
+            slots:
+              content:
+                - id: brslh5y8sewx9rv
+                  type: title
+                  properties:
+                    title: >-
+                      Recherchen und Dokumentationen zur sozialistischen Arbeiterbewegung mit
+                      Schwerpunkt Schweiz
+                    element: h2
+                    hidden: false
+                  slots: {}
+          - id: r5dlec8jv7ujdot
+            type: column
+            properties:
+              width: "6"
+              start: "7"
+              hidden: false
+            slots:
+              content:
+                - id: 0rakut9agouyz0d
+                  type: text
+                  properties:
+                    text: |-
+                      *Recherchen und Publikationen zur revolutionären Arbeiterbewegung.*
+
+                      *Recherchen+Publikationen zu proletarisch-revolutionärer Lyrik/Literatur/Dramatik.*
+
+                      *Recherchen+Publikationen zum sozialistischen Verlagswesen der Schweiz.*
+
+                      *Recherchen+Aufsätze zur Oktoberrevolution.*
+                    hidden: false
+                  slots: {}
+    - id: ly3rd8rdbcdrvg8
+      type: accordion
+      properties:
+        hidden: false
+      slots:
+        summary:
+          - id: 3gdkjky8f4ufzx8
+            type: title
+            properties:
+              title: >-
+                Bisherige Publikationen im Verlag der Dokumentationsstelle für historische
+                Recherchen, 8050 Zürich
+              element: none
+              hidden: false
+            slots: {}
+        details:
+          - id: d7qpdddseh6qhly
+            type: text
+            properties:
+              text: |-
+                **Kurzdokumentation:** Sechzig Zeitungen und Zeitschriften der militanten Schweizer Arbeiterbewegung von 1868 bis 1948, 4 Seiten, 1. Mai 2021.
+
+                **Broschüre:** Wie der Freisinn zur Macht kam. Eine Artikelreihe des militanten ArbeiterInnenführers Jakob Herzog aus dem Jahre 1929, herausgegeben und kommentiert von der Dokumentationsstelle für historische Recherchen. 24 Seiten, Zürich 1. Mai 2022.
+
+                **Dokumentation:** Zitate zum Aufbau des Sozialismus in der Sowjetunion aus den (deutschsprachigen) Schriften Lenins, 4 Seiten, 1. Mai 2018.
+
+                **Literarische Dokumentationen zur Geschichte der proletarisch-revolutionären Literatur und ihrer Verlage:**
+
+                - **Kurzbibliografie:** Meshdunarodnaja Kniga (das internationale Buch); mit einleitendem Text u. Hinweisen auf Brigitte Melzwig. 3 Seiten.
+                - **Kurzdokumentation:** Die revolutionären Märchen Hermynia zur Mühlens und anderer sozialistischer Autorinnen und Autoren. 3 Seiten, 2019.
+                - **Kurzdokumentation:** Romane, Lebensberichte und Erzählungen aus der sozialistischen Literaturbewegung. 4 Seiten, Oktober 2020.
+
+                **Buch:** Zwei frühe kommunistische Schweizer Verlage. Illustrierte Bibliografie, Promachos und Ring-Verlag, 128 Seiten, Zürich 2021.
+
+                **Reprint, Hrsg. Dokumentationsstelle:** Der Marshallplan und die Schweiz. Vier Reden und ein Sturm im Parlament. Nach dem Original der Partei der Arbeit d. Schweiz 1948. 45 S., Zürich, 1. Mai 2023.
+
+                **Reprint, Hrsg. Dokumentationsstelle:** Hans Mühlestein. Arbeiter und Bauer. Original: Vortrag im Bildungsausschuss der PdA, August 1944. Mit einem Nachwort zur Klassenfrage des Herausgebers, 23 Seiten, Zürich, 1. Mai 2025.
+
+                **Beitrag zur Zimmerwaldkonferenz 2.0, Sept. 2025:** Thesen über das Verhältnis der Sozialdemokratischen Partei der Schweiz zum Krieg (1916). 4 Seiten, Zürich 2025.
+
+                **Broschüre:** Eine Rede im Zürcher Volkshaus vor der Soz. Jugendorganisation durch Lenin 1917. Mit Illustrationen. 24 Seiten, Zürich 2026.
+
+                **Weitere:** Flugschriften zur Klassenfrage und Klassendefinition. Flugschriften zum Ukrainekrieg und zur unsinnigen «Vaterlandsverteidigung» durch Arbeiterinnen und Arbeiter als Soldaten in beiden Armeen, in den Truppen Russlands und der Ukraine. Flugschriften mit direktem Aufruf für die **bedingungslose** Bürgerrechtserteilung an Lohnarbeitende in der Schweiz gleich welcher staatlichen Herkunft.
+              hidden: false
+            slots: {}
