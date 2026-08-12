@@ -78,7 +78,7 @@ function Page({
     >
       <header className="site-header">
         <p className="site-header__title">
-          Dokumentationsstelle für geschichtliche Recherchen Zürich
+          Dokumentationsstelle für geschichtliche Recherchen
         </p>
       </header>
       <h1 className="visually-hidden">{title}</h1>
