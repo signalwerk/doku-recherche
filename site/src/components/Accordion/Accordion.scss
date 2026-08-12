@@ -45,8 +45,7 @@
 }
 
 .accordion__details {
-  max-width: var(--measure);
-  padding: 0 0 2rem clamp(1rem, 4vw, 4rem);
+  padding: 0 0 2rem;
 }
 
 .accordion__details > * + * {
