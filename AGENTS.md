@@ -25,6 +25,15 @@ required.
   renderer and project Sass.
 - Public routes are derived from `content_id`, `parent_id`, and `slug`. Route
   hierarchy errors and duplicate paths must fail the build.
+- Keep the two miniCMS ID categories distinct. A record's top-level `id` is a
+  readable, filesystem-safe storage key, must equal its YAML filename stem,
+  and is not subject to the generated-ID pattern. Every opaque identity—each
+  `content_id`, every nested node or image-annotation `id`, tag ID, and any
+  relation or hierarchy value targeting one of those identities—must be made
+  with `createId()` from `miniCMS/core/id.js` and match
+  `^[a-z0-9]{15}$`. Generated identity definitions must be globally unique;
+  references deliberately reuse an existing identity. Never invent an opaque
+  ID from a title, slug, date, counter, or UUID.
 - Persist image identity as `{hash, filename}`. Resolved `src` values are
   transient and must never be written to YAML.
 - Hidden nodes remain selectable in authoring but are absent publicly.
