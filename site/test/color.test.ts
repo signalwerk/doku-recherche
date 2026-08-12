@@ -72,11 +72,11 @@ test("selected and marked text is white on black", async () => {
   );
 });
 
-test("all anchors share the black underline and red hover treatment", async () => {
-  const globalStyles = await readFile(
-    path.join(sourceRoot, "styles/_global.scss"),
-    "utf8"
-  );
+test("anchors share one treatment except for the unadorned header link", async () => {
+  const [globalStyles, pageStyles] = await Promise.all([
+    readFile(path.join(sourceRoot, "styles/_global.scss"), "utf8"),
+    readFile(path.join(sourceRoot, "components/Page/Page.scss"), "utf8")
+  ]);
   assert.match(
     globalStyles,
     /a\s*{\s*color:\s*var\(--ink\);\s*text-decoration-color:\s*currentColor;\s*text-decoration-line:\s*underline;\s*text-decoration-thickness:\s*0\.1em;\s*text-underline-offset:\s*0\.22em;\s*}/
@@ -84,5 +84,9 @@ test("all anchors share the black underline and red hover treatment", async () =
   assert.match(
     globalStyles,
     /a:hover\s*{\s*color:\s*var\(--accent\);\s*text-decoration-color:\s*currentColor;\s*}/
+  );
+  assert.match(
+    pageStyles,
+    /\.site-header__title\s*{[^}]*text-decoration:\s*none;/s
   );
 });

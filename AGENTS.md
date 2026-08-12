@@ -44,9 +44,10 @@ required.
   darker or alternate reds. Text selection and semantic marked text use white
   on black. All anchors use black text with a current-color underline offset by
   `0.22em` and `0.1em` thick; both text and underline change to the accent on
-  hover. Component styles must not override that link treatment. Keep font URLs
-  in source Sass so Vite rewrites them correctly for GitHub Pages base paths
-  and inlines them into the preview bundle.
+  hover. The site-header home link is the sole exception and has no underline.
+  Component styles must not otherwise override the link treatment. Keep font
+  URLs in source Sass so Vite rewrites them correctly for GitHub Pages base
+  paths and inlines them into the preview bundle.
 - Public routes are derived from `content_id`, `parent_id`, and `slug`. Route
   hierarchy errors and duplicate paths must fail the build.
 - Markdown content links persist only the stable page `content_id` as
