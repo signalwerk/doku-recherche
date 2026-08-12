@@ -9,10 +9,11 @@
 
 .accordion > summary {
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: 1em 1fr;
   gap: 0.5em;
   align-items: center;
   padding: 1.25rem 0;
+  font-size: var(--body-font-size);
   cursor: pointer;
   list-style: none;
 }

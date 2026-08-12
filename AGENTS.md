@@ -47,7 +47,9 @@ required.
   hover. The site-header home link is the sole exception and has no underline.
   Component styles must not otherwise override the link treatment. Keep font
   URLs in source Sass so Vite rewrites them correctly for GitHub Pages base
-  paths and inlines them into the preview bundle.
+  paths and inlines them into the preview bundle. Body copy uses the shared
+  `--body-font-size`; list-item text and accordion-summary text both begin
+  `1.5em` from their common left edge at that font size.
 - Public routes are derived from `content_id`, `parent_id`, and `slug`. Route
   hierarchy errors and duplicate paths must fail the build.
 - Markdown content links persist only the stable page `content_id` as

@@ -1,7 +1,7 @@
 .prose {
   min-width: 0;
   overflow-wrap: anywhere;
-  font-size: clamp(1.05rem, 1.5vw, 1.28rem);
+  font-size: var(--body-font-size);
   line-height: 1.55;
 }
 
