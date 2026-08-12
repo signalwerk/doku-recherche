@@ -53,6 +53,11 @@
 }
 
 .site-footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 2rem;
+  align-items: baseline;
+  justify-content: space-between;
   margin-top: auto;
   padding: 1.5rem 0 2.5rem;
   border-top: 1px solid var(--ink);
@@ -65,4 +70,8 @@
 
 .site-footer p {
   margin: 0;
+}
+
+.site-footer__year {
+  margin-left: auto;
 }

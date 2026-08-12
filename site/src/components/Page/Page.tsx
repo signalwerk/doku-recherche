@@ -30,9 +30,10 @@ export default function Page({
       <SlotGroups slots={slots} omitted={["content"]} />
       <footer className="site-footer">
         <p>
-          Dokumentationsstelle für geschichtliche Recherchen Zürich · 8050 Zürich ·{" "}
+          8050 Zürich ·{" "}
           <a href="mailto:info.recherche@ggaweb.ch">info.recherche@ggaweb.ch</a>
         </p>
+        <p className="site-footer__year">2026</p>
       </footer>
     </article>
   );
