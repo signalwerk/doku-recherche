@@ -45,3 +45,16 @@ test("body paragraphs use the configured asymmetric vertical rhythm", async () =
 
   assert.match(paragraph, /margin:\s*0\.65em 0 1\.1em;/);
 });
+
+test("accordion summaries use a leading disclosure triangle", async () => {
+  const accordionStyles = await readFile(
+    path.join(componentsRoot, "Accordion/Accordion.scss"),
+    "utf8"
+  );
+  const summary = /\.accordion > summary\s*{([^}]*)}/s.exec(accordionStyles)?.[1] ?? "";
+
+  assert.match(summary, /grid-template-columns:\s*auto 1fr;/);
+  assert.match(accordionStyles, /\.accordion > summary::before\s*{[^}]*clip-path:\s*polygon\(/s);
+  assert.match(accordionStyles, /\.accordion\[open\] > summary::before\s*{[^}]*transform:\s*rotate\(90deg\);/s);
+  assert.doesNotMatch(accordionStyles, /content:\s*["'][+−]["']/);
+});

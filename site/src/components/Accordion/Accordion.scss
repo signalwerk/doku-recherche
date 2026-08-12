@@ -9,8 +9,8 @@
 
 .accordion > summary {
   display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 1rem;
+  grid-template-columns: auto 1fr;
+  gap: 0.5em;
   align-items: center;
   padding: 1.25rem 0;
   cursor: pointer;
@@ -21,16 +21,16 @@
   display: none;
 }
 
-.accordion > summary::after {
-  content: "+";
-  color: var(--accent);
-  font-size: clamp(1.05rem, 1.5vw, 1.28rem);
-  font-weight: 700;
-  line-height: 1;
+.accordion > summary::before {
+  width: 0.65em;
+  aspect-ratio: 1;
+  background: var(--accent);
+  clip-path: polygon(12% 0, 100% 50%, 12% 100%);
+  content: "";
 }
 
-.accordion[open] > summary::after {
-  content: "−";
+.accordion[open] > summary::before {
+  transform: rotate(90deg);
 }
 
 .accordion__summary {
