@@ -5,6 +5,7 @@ import test from "node:test";
 import { fileURLToPath } from "node:url";
 
 import {
+  fittedSpreadWidth,
   lastSpreadStart,
   nextSpreadStart,
   normalizeSpreadStart,
@@ -40,6 +41,12 @@ test("spread status is concise and localized", () => {
   assert.equal(spreadStatus([2, 3], 54), "Seiten 2–3 von 54");
 });
 
+test("spread width is capped by both its container and the visible height", () => {
+  assert.equal(Math.round(fittedSpreadWidth(1800, 700, [0.7, 0.7])), 980);
+  assert.equal(Math.round(fittedSpreadWidth(800, 700, [0.7, 0.7])), 800);
+  assert.equal(Math.round(fittedSpreadWidth(800, 700, [0.7])), 490);
+});
+
 test("the viewer keeps navigation minimal without an external PDF button", async () => {
   const component = await readFile(
     path.resolve(
@@ -60,6 +67,10 @@ test("paired pages touch with one grey divider inside a black outline", async ()
     "utf8"
   );
   assert.match(styles, /\.pdf-viewer__stage\s*{[^}]*gap:\s*0;/s);
+  assert.match(
+    styles,
+    /\.pdf-viewer__stage\s*{[^}]*width:\s*min\(100%, var\(--pdf-stage-width, 100%\)\);/s
+  );
   assert.match(styles, /\.pdf-viewer__page\s*{[^}]*border:\s*1px solid var\(--ink\);/s);
   assert.match(
     styles,

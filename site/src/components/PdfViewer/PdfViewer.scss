@@ -9,7 +9,9 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0;
   align-items: center;
-  width: 100%;
+  width: min(100%, var(--pdf-stage-width, 100%));
+  margin-right: auto;
+  margin-left: auto;
 }
 
 .pdf-viewer__stage[data-page-count="1"] {

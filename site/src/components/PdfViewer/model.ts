@@ -39,3 +39,19 @@ export function spreadStatus(pages: number[], totalPages: number): string {
     ? `Seite ${pages[0]} von ${total}`
     : `Seiten ${pages[0]}–${pages[1]} von ${total}`;
 }
+
+export function fittedSpreadWidth(
+  containerWidth: number,
+  availableHeight: number,
+  pageRatios: number[]
+): number {
+  const width = Math.max(0, containerWidth);
+  const height = Math.max(0, availableHeight);
+  if (width === 0 || height === 0 || pageRatios.length === 0) return 0;
+
+  const ratios = pageRatios.map((ratio) =>
+    Number.isFinite(ratio) && ratio > 0 ? ratio : 1
+  );
+  const narrowestPage = Math.min(...ratios);
+  return Math.min(width, height * narrowestPage * ratios.length);
+}

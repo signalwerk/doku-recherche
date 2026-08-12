@@ -2,11 +2,13 @@ import {
   getDocument,
   GlobalWorkerOptions,
   type PDFDocumentProxy,
+  type PDFPageProxy,
   type RenderTask,
   TextLayer
 } from "pdfjs-dist";
 import PdfWorker from "pdfjs-dist/build/pdf.worker.min.mjs?worker&inline";
 import {
+  fittedSpreadWidth,
   lastSpreadStart,
   nextSpreadStart,
   previousSpreadStart,
@@ -31,6 +33,18 @@ function element<T extends Element>(root: HTMLElement, selector: string): T {
   return match;
 }
 
+function cssPixels(value: string): number {
+  const parsed = Number.parseFloat(value);
+  return Number.isFinite(parsed) ? parsed : 0;
+}
+
+function outerBlockSize(target: HTMLElement): number {
+  const styles = window.getComputedStyle(target);
+  return target.getBoundingClientRect().height
+    + cssPixels(styles.marginTop)
+    + cssPixels(styles.marginBottom);
+}
+
 function initializePdfViewer(root: HTMLElement, source: string): ViewerController {
   const stage = element<HTMLElement>(root, "[data-pdf-stage]");
   const frames = [...root.querySelectorAll<HTMLElement>("[data-pdf-page-frame]")];
@@ -38,6 +52,7 @@ function initializePdfViewer(root: HTMLElement, source: string): ViewerControlle
   const textLayerContainers = [
     ...root.querySelectorAll<HTMLElement>("[data-pdf-text-layer]")
   ];
+  const controls = element<HTMLElement>(root, ".pdf-viewer__controls");
   const previous = element<HTMLButtonElement>(root, "[data-pdf-previous]");
   const next = element<HTMLButtonElement>(root, "[data-pdf-next]");
   const status = element<HTMLElement>(root, "[data-pdf-status]");
@@ -62,17 +77,15 @@ function initializePdfViewer(root: HTMLElement, source: string): ViewerControlle
 
   async function renderPage(
     pageNumber: number,
+    page: PDFPageProxy,
     frame: HTMLElement,
     canvas: HTMLCanvasElement,
     textLayerContainer: HTMLElement,
     generation: number
   ) {
-    if (!document) return;
-    const page = await document.getPage(pageNumber);
     if (destroyed || generation !== renderGeneration) return;
 
     const originalViewport = page.getViewport({ scale: 1 });
-    frame.style.aspectRatio = `${originalViewport.width} / ${originalViewport.height}`;
     const cssWidth = frame.getBoundingClientRect().width;
     if (cssWidth < 1) return;
 
@@ -107,12 +120,33 @@ function initializePdfViewer(root: HTMLElement, source: string): ViewerControlle
     await Promise.all([task.promise, textLayer.render()]);
   }
 
+  function fitSpreadToViewport(pageRatios: number[]) {
+    const viewportHeight = window.visualViewport?.height ?? window.innerHeight;
+    const stageTop = Math.max(0, stage.getBoundingClientRect().top);
+    const navigationHeight = outerBlockSize(message) + outerBlockSize(controls);
+    const availableHeight = Math.max(
+      1,
+      viewportHeight - stageTop - navigationHeight - 16
+    );
+    const fittedWidth = fittedSpreadWidth(
+      root.getBoundingClientRect().width,
+      availableHeight,
+      pageRatios
+    );
+
+    if (fittedWidth > 0) {
+      root.style.setProperty("--pdf-stage-width", `${Math.floor(fittedWidth)}px`);
+    }
+  }
+
   async function renderSpread() {
     if (!document || destroyed) return;
+    const currentDocument = document;
     cancelRendering();
     const generation = renderGeneration;
     const pages = spreadPages(spreadStart, document.numPages);
     stage.dataset.pageCount = String(pages.length);
+    root.dataset.pdfPageCount = String(pages.length);
     status.textContent = spreadStatus(pages, document.numPages);
     previous.disabled = spreadStart === 1;
     next.disabled = spreadStart === lastSpreadStart(document.numPages);
@@ -127,17 +161,40 @@ function initializePdfViewer(root: HTMLElement, source: string): ViewerControlle
     });
 
     try {
+      const loadedPages = await Promise.all(
+        pages.map(async (pageNumber) => ({
+          pageNumber,
+          page: await currentDocument.getPage(pageNumber)
+        }))
+      );
+      if (destroyed || generation !== renderGeneration) return;
+
+      const pageRatios = loadedPages.map(({ page }, index) => {
+        const viewport = page.getViewport({ scale: 1 });
+        const frame = frames[index];
+        if (frame) frame.style.aspectRatio = `${viewport.width} / ${viewport.height}`;
+        return viewport.width / viewport.height;
+      });
+      message.textContent = "";
+      fitSpreadToViewport(pageRatios);
+
       await Promise.all(
-        pages.map((pageNumber, index) => {
+        loadedPages.map(({ pageNumber, page }, index) => {
           const frame = frames[index];
           const canvas = canvases[index];
           const textLayerContainer = textLayerContainers[index];
           return frame && canvas && textLayerContainer
-            ? renderPage(pageNumber, frame, canvas, textLayerContainer, generation)
+            ? renderPage(
+                pageNumber,
+                page,
+                frame,
+                canvas,
+                textLayerContainer,
+                generation
+              )
             : Promise.resolve();
         })
       );
-      if (!destroyed && generation === renderGeneration) message.textContent = "";
     } catch (error) {
       if (destroyed || generation !== renderGeneration) return;
       if (error instanceof Error && error.name === "RenderingCancelledException") return;
@@ -179,11 +236,21 @@ function initializePdfViewer(root: HTMLElement, source: string): ViewerControlle
   next.addEventListener("click", showNext);
   root.addEventListener("keydown", onKeydown);
 
-  const resizeObserver = new ResizeObserver(() => {
+  function scheduleResizeRender() {
     window.clearTimeout(resizeTimer);
     resizeTimer = window.setTimeout(() => void renderSpread(), 120);
+  }
+
+  let observedRootWidth = root.getBoundingClientRect().width;
+  const resizeObserver = new ResizeObserver(([entry]) => {
+    const width = entry?.contentRect.width ?? root.getBoundingClientRect().width;
+    if (Math.abs(width - observedRootWidth) < 0.5) return;
+    observedRootWidth = width;
+    scheduleResizeRender();
   });
-  resizeObserver.observe(stage);
+  resizeObserver.observe(root);
+  window.addEventListener("resize", scheduleResizeRender);
+  window.visualViewport?.addEventListener("resize", scheduleResizeRender);
 
   void loadingTask.promise.then(
     (loadedDocument) => {
@@ -209,6 +276,8 @@ function initializePdfViewer(root: HTMLElement, source: string): ViewerControlle
       cancelRendering();
       resizeObserver.disconnect();
       window.clearTimeout(resizeTimer);
+      window.removeEventListener("resize", scheduleResizeRender);
+      window.visualViewport?.removeEventListener("resize", scheduleResizeRender);
       previous.removeEventListener("click", showPrevious);
       next.removeEventListener("click", showNext);
       root.removeEventListener("keydown", onKeydown);
