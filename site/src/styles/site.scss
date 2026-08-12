@@ -139,12 +139,18 @@ a:hover {
 }
 
 .site-header {
-  display: grid;
-  grid-template-columns: auto minmax(2rem, 1fr) auto;
-  gap: clamp(0.9rem, 2vw, 2rem);
+  display: flex;
   align-items: center;
   min-height: 6.4rem;
   border-bottom: 1px solid var(--ink);
+}
+
+.site-header__title {
+  margin: 0;
+  font-size: clamp(0.85rem, 1.5vw, 1rem);
+  font-weight: 750;
+  line-height: 1.25;
+  letter-spacing: 0.02em;
 }
 
 .site-header__mark {
@@ -605,16 +611,22 @@ h6 {
 }
 
 .site-footer {
-  display: flex;
-  gap: 1rem;
-  justify-content: space-between;
   padding: 1.5rem 0 2.5rem;
   border-top: 1px solid var(--ink);
   color: var(--ink-soft);
-  font-size: 0.67rem;
+  font-size: 0.72rem;
   font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  line-height: 1.5;
+  letter-spacing: 0.035em;
+}
+
+.site-footer p {
+  margin: 0;
+}
+
+.site-footer a {
+  color: inherit;
+  text-underline-offset: 0.16em;
 }
 
 [data-minicms-hidden="true"] {

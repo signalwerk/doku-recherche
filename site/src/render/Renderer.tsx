@@ -63,13 +63,9 @@ function hiddenValue(node: ContentNode, authoring: boolean) {
 function Page({
   node,
   slots,
-  data,
   authoring,
   authoringProps
 }: RendererComponentProps) {
-  const siteName = typeof data.config.site?.name === "string"
-    ? data.config.site.name
-    : "Archive";
   const title = propertyText(node, "title") || "Untitled page";
   const layout = node.properties.layout === "wide" ? "wide" : "default";
 
@@ -81,11 +77,9 @@ function Page({
       {...authoringProps}
     >
       <header className="site-header">
-        <p className="site-header__mark" aria-label={siteName}>
-          <span aria-hidden="true">D</span>
+        <p className="site-header__title">
+          Dokumentationsstelle für geschichtliche Recherchen Zürich
         </p>
-        <div className="site-header__rule" aria-hidden="true" />
-        <p className="site-header__descriptor">Dokumente · Kontexte · Spuren</p>
       </header>
       <h1 className="visually-hidden">{title}</h1>
       <div className="page__content" data-slot="content">
@@ -93,7 +87,10 @@ function Page({
       </div>
       <SlotGroups slots={slots} omitted={["content"]} />
       <footer className="site-footer">
-        <span>Archiv · Zürich</span>
+        <p>
+          Dokumentationsstelle für geschichtliche Recherchen Zürich · 8050 Zürich ·{" "}
+          <a href="mailto:info.recherche@ggaweb.ch">info.recherche@ggaweb.ch</a>
+        </p>
       </footer>
     </article>
   );
