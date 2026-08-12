@@ -41,7 +41,11 @@ test("the project bundles Geist with its named styleset alternates", async () =>
   assert.match(license, /Copyright 2024 The Geist Project Authors/);
   assert.match(
     globalStyles,
-    /@font-face\s*{[\s\S]*font-weight:\s*100 900;[\s\S]*url\("\.\.\/assets\/fonts\/geist\/Geist-Variable\.woff2"\)/
+    /@font-face\s*{[^}]*font-weight:\s*400;[^}]*url\("\.\.\/assets\/fonts\/geist\/Geist-Variable\.woff2"\)/
+  );
+  assert.match(
+    globalStyles,
+    /@font-face\s*{[^}]*font-weight:\s*700;[^}]*url\("\.\.\/assets\/fonts\/geist\/Geist-Variable\.woff2"\)/
   );
   assert.match(
     globalStyles,

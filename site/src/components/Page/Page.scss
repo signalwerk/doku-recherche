@@ -18,9 +18,9 @@
 .site-header__title {
   margin: 0;
   font-size: clamp(0.85rem, 1.5vw, 1rem);
-  font-weight: 750;
+  font-weight: 700;
   line-height: 1.25;
-  letter-spacing: 0.02em;
+  letter-spacing: 0;
 }
 
 .page__content {
@@ -60,7 +60,7 @@
   font-size: 1rem;
   font-weight: 700;
   line-height: 1.5;
-  letter-spacing: 0.035em;
+  letter-spacing: 0;
 }
 
 .site-footer p {
