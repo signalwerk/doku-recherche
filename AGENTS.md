@@ -66,6 +66,10 @@ required.
 - Persist image identity as `{hash, filename}`. Resolved `src` values are
   transient and must never be written to YAML.
 - Hidden nodes remain selectable in authoring but are absent publicly.
+- PDF viewer canvases have a matching PDF.js text layer at CSS resolution so
+  rendered document text remains selectable. Rebuild and cancel both layers
+  together on page changes and resizes; the transparent text overlay must not
+  alter the visible page or duplicate its accessible page label.
 - The page canvas is fluid. Header, footer, and `default` grids share the
   `--content-width` constraint inside the standard gutters; `full_width` grids
   use the complete canvas minus only those gutters. Page records should put

@@ -48,7 +48,7 @@ test("extended letter spacing is limited to CSS-uppercase text", () => {
     const declarations = rule[2] ?? "";
     const spacingMatch = /letter-spacing\s*:\s*([^;]+);/.exec(declarations);
     const spacing = (spacingMatch?.[1] ?? "").trim();
-    if (!spacing || spacing === "0") continue;
+    if (!spacing || spacing === "0" || spacing === "normal") continue;
     if (spacing.startsWith("-") || !/text-transform\s*:\s*uppercase;/.test(declarations)) {
       violations.push(`${selector}: ${spacing}`);
     }

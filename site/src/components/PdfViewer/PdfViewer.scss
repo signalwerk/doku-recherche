@@ -18,6 +18,7 @@
 }
 
 .pdf-viewer__page {
+  position: relative;
   min-width: 0;
   overflow: hidden;
   border: 1px solid var(--ink);
@@ -46,6 +47,53 @@
   width: 100%;
   height: auto;
   background: var(--paper-pure);
+}
+
+.pdf-viewer__text-layer {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  overflow: clip;
+  color-scheme: only light;
+  line-height: 1;
+  letter-spacing: normal;
+  word-spacing: normal;
+  text-align: initial;
+  text-size-adjust: none;
+  transform-origin: 0 0;
+  --min-font-size: 1;
+  --scale-round-x: 1px;
+  --scale-round-y: 1px;
+  --text-scale-factor: calc(var(--total-scale-factor) * var(--min-font-size));
+  --min-font-size-inv: calc(1 / var(--min-font-size));
+}
+
+.pdf-viewer__text-layer :is(span, br) {
+  position: absolute;
+  color: transparent;
+  white-space: pre;
+  cursor: text;
+  transform-origin: 0% 0%;
+  user-select: text;
+}
+
+.pdf-viewer__text-layer > :not(.markedContent),
+.pdf-viewer__text-layer .markedContent span:not(.markedContent) {
+  z-index: 1;
+  font-size: calc(var(--text-scale-factor) * var(--font-height));
+  transform:
+    rotate(var(--rotate, 0deg))
+    scaleX(var(--scale-x, 1))
+    scale(var(--min-font-size-inv));
+}
+
+.pdf-viewer__text-layer .markedContent {
+  display: contents;
+}
+
+.pdf-viewer__text-layer ::selection {
+  color: var(--paper-pure);
+  background: var(--ink);
 }
 
 .pdf-viewer__message {

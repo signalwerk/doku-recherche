@@ -2,7 +2,8 @@ import {
   getDocument,
   GlobalWorkerOptions,
   type PDFDocumentProxy,
-  type RenderTask
+  type RenderTask,
+  TextLayer
 } from "pdfjs-dist";
 import PdfWorker from "pdfjs-dist/build/pdf.worker.min.mjs?worker&inline";
 import {
@@ -34,6 +35,9 @@ function initializePdfViewer(root: HTMLElement, source: string): ViewerControlle
   const stage = element<HTMLElement>(root, "[data-pdf-stage]");
   const frames = [...root.querySelectorAll<HTMLElement>("[data-pdf-page-frame]")];
   const canvases = [...root.querySelectorAll<HTMLCanvasElement>("[data-pdf-canvas]")];
+  const textLayerContainers = [
+    ...root.querySelectorAll<HTMLElement>("[data-pdf-text-layer]")
+  ];
   const previous = element<HTMLButtonElement>(root, "[data-pdf-previous]");
   const next = element<HTMLButtonElement>(root, "[data-pdf-next]");
   const status = element<HTMLElement>(root, "[data-pdf-status]");
@@ -43,19 +47,24 @@ function initializePdfViewer(root: HTMLElement, source: string): ViewerControlle
   let spreadStart = 1;
   let renderGeneration = 0;
   let renderTasks: RenderTask[] = [];
+  let textLayers: TextLayer[] = [];
   let resizeTimer = 0;
   let destroyed = false;
 
   function cancelRendering() {
     renderGeneration += 1;
     for (const task of renderTasks) task.cancel();
+    for (const layer of textLayers) layer.cancel();
     renderTasks = [];
+    textLayers = [];
+    for (const container of textLayerContainers) container.replaceChildren();
   }
 
   async function renderPage(
     pageNumber: number,
     frame: HTMLElement,
     canvas: HTMLCanvasElement,
+    textLayerContainer: HTMLElement,
     generation: number
   ) {
     if (!document) return;
@@ -68,6 +77,9 @@ function initializePdfViewer(root: HTMLElement, source: string): ViewerControlle
     if (cssWidth < 1) return;
 
     const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+    const cssViewport = page.getViewport({
+      scale: cssWidth / originalViewport.width
+    });
     const viewport = page.getViewport({
       scale: (cssWidth * pixelRatio) / originalViewport.width
     });
@@ -78,8 +90,21 @@ function initializePdfViewer(root: HTMLElement, source: string): ViewerControlle
     canvas.setAttribute("aria-label", `Seite ${pageNumber}`);
 
     const task = page.render({ canvas, viewport });
+    textLayerContainer.style.setProperty(
+      "--total-scale-factor",
+      String(cssViewport.scale * page.userUnit)
+    );
+    const textLayer = new TextLayer({
+      textContentSource: page.streamTextContent({
+        includeMarkedContent: true,
+        disableNormalization: true
+      }),
+      container: textLayerContainer,
+      viewport: cssViewport
+    });
     renderTasks.push(task);
-    await task.promise;
+    textLayers.push(textLayer);
+    await Promise.all([task.promise, textLayer.render()]);
   }
 
   async function renderSpread() {
@@ -97,6 +122,7 @@ function initializePdfViewer(root: HTMLElement, source: string): ViewerControlle
       frame.hidden = pageNumber === undefined;
       if (pageNumber === undefined) {
         canvases[index]?.removeAttribute("aria-label");
+        textLayerContainers[index]?.replaceChildren();
       }
     });
 
@@ -105,13 +131,15 @@ function initializePdfViewer(root: HTMLElement, source: string): ViewerControlle
         pages.map((pageNumber, index) => {
           const frame = frames[index];
           const canvas = canvases[index];
-          return frame && canvas
-            ? renderPage(pageNumber, frame, canvas, generation)
+          const textLayerContainer = textLayerContainers[index];
+          return frame && canvas && textLayerContainer
+            ? renderPage(pageNumber, frame, canvas, textLayerContainer, generation)
             : Promise.resolve();
         })
       );
       if (!destroyed && generation === renderGeneration) message.textContent = "";
     } catch (error) {
+      if (destroyed || generation !== renderGeneration) return;
       if (error instanceof Error && error.name === "RenderingCancelledException") return;
       if (!destroyed) message.textContent = "Die PDF-Seiten konnten nicht dargestellt werden.";
     }

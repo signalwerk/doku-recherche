@@ -70,3 +70,25 @@ test("paired pages touch with one grey divider inside a black outline", async ()
     /data-page-count="2"[^}]*\.pdf-viewer__page \+ \.pdf-viewer__page\s*{[^}]*border-inline-start:\s*0;/s
   );
 });
+
+test("the viewer overlays each canvas with a selectable PDF.js text layer", async () => {
+  const directory = path.resolve(
+    path.dirname(fileURLToPath(import.meta.url)),
+    "../src/components/PdfViewer"
+  );
+  const [component, client, styles] = await Promise.all([
+    readFile(path.join(directory, "PdfViewer.tsx"), "utf8"),
+    readFile(path.join(directory, "client.ts"), "utf8"),
+    readFile(path.join(directory, "PdfViewer.scss"), "utf8")
+  ]);
+
+  assert.equal(component.match(/data-pdf-text-layer=/g)?.length, 2);
+  assert.match(client, /TextLayer/);
+  assert.match(client, /page\.streamTextContent/);
+  assert.match(client, /textLayer\.render\(\)/);
+  assert.match(styles, /\.pdf-viewer__text-layer :is\(span, br\)[^{]*{[^}]*user-select:\s*text;/s);
+  assert.match(
+    styles,
+    /\.pdf-viewer__text-layer ::selection\s*{[^}]*color:\s*var\(--paper-pure\);[^}]*background:\s*var\(--ink\);/s
+  );
+});

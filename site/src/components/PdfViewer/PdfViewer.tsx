@@ -57,9 +57,19 @@ export default function PdfViewer({
           <div className="pdf-viewer__stage" data-pdf-stage="" data-page-count="1">
             <div className="pdf-viewer__page" data-pdf-page-frame="">
               <canvas data-pdf-canvas="" aria-label="Seite 1" />
+              <div
+                className="pdf-viewer__text-layer"
+                data-pdf-text-layer=""
+                aria-hidden="true"
+              />
             </div>
             <div className="pdf-viewer__page" data-pdf-page-frame="" hidden>
               <canvas data-pdf-canvas="" />
+              <div
+                className="pdf-viewer__text-layer"
+                data-pdf-text-layer=""
+                aria-hidden="true"
+              />
             </div>
           </div>
           <p className="pdf-viewer__message" data-pdf-message="" role="status">
