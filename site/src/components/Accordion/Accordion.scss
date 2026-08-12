@@ -24,8 +24,8 @@
 .accordion > summary::after {
   content: "+";
   color: var(--accent);
-  font-size: 2rem;
-  font-weight: 400;
+  font-size: clamp(1.05rem, 1.5vw, 1.28rem);
+  font-weight: 700;
   line-height: 1;
 }
 
