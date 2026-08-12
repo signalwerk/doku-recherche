@@ -40,9 +40,10 @@ required.
   `alt-r` named styleset alternates. Public and preview typography uses only
   font weights `400` and `700`. Letter spacing must never be negative; positive
   letter spacing is allowed only in a rule that also transforms its text to
-  uppercase with CSS. Keep font URLs in source Sass so Vite rewrites them
-  correctly for GitHub Pages base paths and inlines them into the preview
-  bundle.
+  uppercase with CSS. `#b92822` is the only saturated accent color; do not add
+  darker or alternate reds. Text selection and semantic marked text use white
+  on black. Keep font URLs in source Sass so Vite rewrites them correctly for
+  GitHub Pages base paths and inlines them into the preview bundle.
 - Public routes are derived from `content_id`, `parent_id`, and `slug`. Route
   hierarchy errors and duplicate paths must fail the build.
 - Markdown content links persist only the stable page `content_id` as

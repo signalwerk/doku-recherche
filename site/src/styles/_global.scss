@@ -33,7 +33,6 @@
   --ink-soft: #5b5954;
   --line: #a9a39a;
   --accent: #b92822;
-  --accent-dark: #781813;
   --content-width: 76rem;
   --measure: 45rem;
   --gutter: clamp(1.2rem, 4vw, 4.5rem);
@@ -85,7 +84,7 @@ svg {
 }
 
 a {
-  color: var(--accent-dark);
+  color: var(--accent);
   text-decoration-color: color.change(#b92822, $alpha: 0.45);
   text-underline-offset: 0.16em;
 }
@@ -102,7 +101,12 @@ a:hover {
 
 ::selection {
   color: var(--paper-pure);
-  background: var(--accent-dark);
+  background: var(--ink);
+}
+
+mark {
+  color: var(--paper-pure);
+  background: var(--ink);
 }
 
 .visually-hidden {
@@ -123,7 +127,7 @@ a:hover {
   left: 0.75rem;
   padding: 0.65rem 0.85rem;
   color: var(--paper-pure);
-  background: var(--accent-dark);
+  background: var(--accent);
   font-weight: 700;
   transform: translateY(calc(-100% - 1rem));
 }
