@@ -7,7 +7,7 @@ export function ProjectPreview({ data, focus }: PreviewRendererProps) {
   return (
     <>
       <style>{stylesheet}</style>
-      <Renderer data={data} focus={focus} />
+      <Renderer data={data} focus={focus} basePath={import.meta.env.BASE_URL} />
     </>
   );
 }

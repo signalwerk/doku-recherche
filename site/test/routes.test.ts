@@ -7,6 +7,8 @@ import {
   RouteManifestError,
   buildRouteManifest,
   normalizeSlugSegment,
+  resolvedPageLinkHref,
+  resolvedPageLinkPath,
   withBasePath
 } from "../src/model/routes.ts";
 
@@ -211,4 +213,81 @@ test("applies the Astro base path to route hrefs and shortcut redirects", () => 
   }
   assert.equal(manifest.href("/target"), "/repository/target");
   assert.equal(withBasePath("/", "/repository/"), "/repository/");
+});
+
+test("derives stable page links from the target's current hierarchy", () => {
+  const home = record("home", { slug: "" });
+  const section = record("section", {
+    parent: "home",
+    slug: "research"
+  });
+  const target = record("target", {
+    parent: "section",
+    slug: "methods"
+  });
+  const link = {
+    collection: "pages",
+    ref: "target",
+    record: target,
+    ancestors: [home, section]
+  };
+
+  assert.equal(resolvedPageLinkPath(link), "/research/methods");
+  assert.equal(
+    resolvedPageLinkHref(link, "/repository/"),
+    "/repository/research/methods"
+  );
+
+  target.properties.parent_id = "home";
+  target.properties.slug = "new-methods";
+  assert.equal(
+    resolvedPageLinkHref({ ...link, ancestors: [home] }, "/repository/"),
+    "/repository/new-methods"
+  );
+});
+
+test("fails stable links closed for unsafe or incomplete targets", () => {
+  const home = record("home", { slug: "" });
+  const target = record("target", { parent: "home", slug: "target" });
+  const valid = {
+    collection: "pages",
+    ref: "target",
+    record: target,
+    ancestors: [home]
+  };
+
+  assert.equal(resolvedPageLinkPath({ ...valid, record: null }), null);
+  assert.equal(resolvedPageLinkPath({ ...valid, ref: "another" }), null);
+  assert.equal(resolvedPageLinkPath({ ...valid, collection: "files" }), null);
+  assert.equal(resolvedPageLinkPath({ ...valid, ancestors: [] }), null);
+  assert.equal(
+    resolvedPageLinkPath({
+      ...valid,
+      ancestors: [home, home]
+    }),
+    null
+  );
+  assert.equal(
+    resolvedPageLinkPath({
+      ...valid,
+      record: record("target", {
+        parent: "home",
+        slug: "target",
+        hidden: true
+      })
+    }),
+    null
+  );
+  assert.equal(
+    resolvedPageLinkPath({
+      ...valid,
+      record: record("target", {
+        parent: "home",
+        slug: "target",
+        type: "shortcut"
+      })
+    }),
+    null,
+    "shortcut destinations require the complete route manifest"
+  );
 });

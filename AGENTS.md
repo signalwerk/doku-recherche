@@ -42,6 +42,12 @@ required.
   preview bundle.
 - Public routes are derived from `content_id`, `parent_id`, and `slug`. Route
   hierarchy errors and duplicate paths must fail the build.
+- Markdown content links persist only the stable page `content_id` as
+  `minicms://link/pages/<id>`. Static pages and the live preview derive the
+  current base-aware URL from the resolved target and its root-to-parent
+  hierarchy, so moving or renaming a page does not change stored Markdown.
+  Missing, hidden, malformed, or shortcut targets render as non-links and the
+  custom scheme must never reach public HTML.
 - Keep the two miniCMS ID categories distinct, but generate both with
   `createId()` from `miniCMS/core/id.js`. Every record's top-level `id` must
   match `^[a-z0-9]{15}$` and equal its YAML filename stem. Every opaque

@@ -40,7 +40,8 @@ export const rendererRegistry = Object.freeze({
 function renderedSlots(
   node: ContentNode,
   data: ContentData,
-  focus: FocusHandler | undefined
+  focus: FocusHandler | undefined,
+  basePath: string
 ): RenderedSlots {
   return Object.fromEntries(
     Object.entries(node.slots ?? {}).map(([name, children]) => [
@@ -51,6 +52,7 @@ function renderedSlots(
               node={child}
               data={data}
               focus={focus}
+              basePath={basePath}
               key={(child.id || child.type) + ":" + index}
             />
           ))
@@ -62,11 +64,13 @@ function renderedSlots(
 function RenderNode({
   node,
   data,
-  focus
+  focus,
+  basePath
 }: {
   node: ContentNode;
   data: ContentData;
   focus?: FocusHandler;
+  basePath: string;
 }) {
   const authoring = Boolean(focus);
   if (!shouldRenderNode(node, authoring)) return null;
@@ -82,8 +86,9 @@ function RenderNode({
   return (
     <Component
       node={node}
-      slots={renderedSlots(node, data, focus)}
+      slots={renderedSlots(node, data, focus, basePath)}
       data={data}
+      basePath={basePath}
       authoring={authoring}
       authoringProps={authoringProps}
     />
@@ -93,13 +98,16 @@ function RenderNode({
 export function renderNode(
   node: ContentNode,
   data: ContentData,
-  focus?: FocusHandler
+  focus?: FocusHandler,
+  basePath = "/"
 ): ReactNode {
-  return <RenderNode node={node} data={data} focus={focus} />;
+  return <RenderNode node={node} data={data} focus={focus} basePath={basePath} />;
 }
 
-export function Renderer({ data, focus }: RendererProps) {
-  return <RenderNode node={data.item} data={data} focus={focus} />;
+export function Renderer({ data, focus, basePath = "/" }: RendererProps) {
+  return (
+    <RenderNode node={data.item} data={data} focus={focus} basePath={basePath} />
+  );
 }
 
 export { Unknown };

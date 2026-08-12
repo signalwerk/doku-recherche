@@ -24,6 +24,7 @@ export type PreviewRendererProps = {
 export type RendererProps = {
   data: ContentData;
   focus?: FocusHandler;
+  basePath?: string;
 };
 
 export type RenderedSlots = Record<string, ReactNode[]>;
@@ -32,6 +33,7 @@ export type RendererComponentProps = {
   node: ContentNode;
   slots: RenderedSlots;
   data: ContentData;
+  basePath: string;
   authoring: boolean;
   authoringProps: AuthoringProps;
 };

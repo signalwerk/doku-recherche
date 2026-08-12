@@ -1,5 +1,6 @@
 import type {
   ContentRecord,
+  ResolvedMarkdownLink,
   ResolvedReference
 } from "@signalwerk/minicms/content";
 
@@ -143,6 +144,77 @@ export function withBasePath(path: string, basePath = ""): string {
   const base = normalizeBasePath(basePath);
   if (!base) return stablePath;
   return stablePath === "/" ? `${base}/` : `${base}${stablePath}`;
+}
+
+/**
+ * Resolve a stable Markdown page identity against its current hierarchy.
+ * Slugs and parent relationships are deliberately read at render time, so a
+ * moved page keeps every stored link valid without persisting a public URL.
+ */
+export function resolvedPageLinkPath(
+  link: Pick<
+    ResolvedMarkdownLink,
+    "collection" | "ref" | "record" | "ancestors"
+  >
+): RoutePath | null {
+  if (
+    link.collection !== "pages" ||
+    !link.record ||
+    link.record.type !== "page" ||
+    !Array.isArray(link.ancestors)
+  ) {
+    return null;
+  }
+
+  const records = [...link.ancestors, link.record];
+  const seen = new Set<string>();
+  const segments: string[] = [];
+  let expectedParent: string | null = null;
+
+  for (const record of records) {
+    if (record.type !== "page" && record.type !== "shortcut") return null;
+    const rawContentId = record.properties.content_id;
+    if (typeof rawContentId !== "string" || !rawContentId.trim()) return null;
+    const currentContentId = rawContentId.trim();
+    if (seen.has(currentContentId)) return null;
+
+    const rawParent = record.properties.parent_id;
+    const currentParent =
+      rawParent === null || rawParent === undefined || rawParent === ""
+        ? null
+        : typeof rawParent === "string" && rawParent.trim()
+          ? rawParent.trim()
+          : undefined;
+    if (currentParent === undefined || currentParent !== expectedParent) {
+      return null;
+    }
+    if (record.properties.hidden === true) return null;
+
+    const rawSlug = record.properties.slug;
+    if (typeof rawSlug !== "string") return null;
+    const segment = normalizeSlugSegment(rawSlug);
+    if (segment) segments.push(segment);
+
+    seen.add(currentContentId);
+    expectedParent = currentContentId;
+  }
+
+  const targetContentId = link.record.properties.content_id;
+  if (typeof targetContentId !== "string" || targetContentId.trim() !== link.ref) {
+    return null;
+  }
+  return routePath(segments);
+}
+
+export function resolvedPageLinkHref(
+  link: Pick<
+    ResolvedMarkdownLink,
+    "collection" | "ref" | "record" | "ancestors"
+  >,
+  basePath = ""
+): string | null {
+  const path = resolvedPageLinkPath(link);
+  return path ? withBasePath(path, basePath) : null;
 }
 
 function contentId(record: ContentRecord): string {

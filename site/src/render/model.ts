@@ -1,7 +1,8 @@
 import {
   prependImageServiceOperations,
   type ContentNode,
-  type ImageOperation
+  type ImageOperation,
+  type ResolvedMarkdown
 } from "@signalwerk/minicms/content";
 import type { CSSProperties } from "react";
 
@@ -126,11 +127,26 @@ export function parseTitleElement(value: unknown): ParsedTitleElement {
   };
 }
 
+export function resolvedMarkdown(value: unknown): ResolvedMarkdown {
+  if (typeof value === "string") {
+    return { markdown: value, references: {}, links: {} };
+  }
+  if (!isMapping(value) || typeof value.markdown !== "string") {
+    return { markdown: "", references: {}, links: {} };
+  }
+  return {
+    markdown: value.markdown,
+    references: isMapping(value.references)
+      ? (value.references as ResolvedMarkdown["references"])
+      : {},
+    links: isMapping(value.links)
+      ? (value.links as ResolvedMarkdown["links"])
+      : {}
+  };
+}
+
 export function markdownSource(value: unknown): string {
-  if (typeof value === "string") return value;
-  return isMapping(value) && typeof value.markdown === "string"
-    ? value.markdown
-    : String(value ?? "");
+  return resolvedMarkdown(value).markdown;
 }
 
 export function nodeIsHidden(node: Pick<ContentNode, "properties">): boolean {

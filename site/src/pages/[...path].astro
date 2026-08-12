@@ -85,5 +85,5 @@ const navigation = manifest.routes
   canonicalPath={route.path}
   navigation={navigation}
 >
-  <Renderer data={data} />
+  <Renderer data={data} basePath={import.meta.env.BASE_URL} />
 </DocumentLayout>

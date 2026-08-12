@@ -75,3 +75,9 @@
   border: 0;
   border-top: 1px solid var(--line);
 }
+
+.prose__internal-link[data-link-missing="true"] {
+  color: var(--ink-soft);
+  text-decoration: line-through;
+  text-decoration-thickness: 0.08em;
+}

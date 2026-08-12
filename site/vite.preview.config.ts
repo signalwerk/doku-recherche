@@ -8,6 +8,7 @@ const outDir = process.env.SITE_PREVIEW_OUT_DIR
   : path.resolve(siteDirectory, "../dist/admin");
 
 export default defineConfig({
+  base: process.env.SITE_BASE_PATH || "/",
   publicDir: false,
   build: {
     outDir,

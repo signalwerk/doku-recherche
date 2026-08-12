@@ -9,6 +9,7 @@ import {
   normalizeImageReference,
   parseTitleElement,
   presentationCrop,
+  resolvedMarkdown,
   resolveImagePresentation,
   shouldRenderNode
 } from "../src/render/model.ts";
@@ -201,4 +202,34 @@ test("canonical service URLs receive a prepended crop and raw URLs use CSS", () 
 test("accordions are forced open only while authoring", () => {
   assert.equal(accordionOpen(true), true);
   assert.equal(accordionOpen(false), undefined);
+});
+
+test("normalizes portable and resolved Markdown values", () => {
+  assert.deepEqual(resolvedMarkdown("Portable Markdown"), {
+    markdown: "Portable Markdown",
+    references: {},
+    links: {}
+  });
+  assert.deepEqual(
+    resolvedMarkdown({
+      markdown: "Resolved Markdown",
+      references: { source: { collection: "sources" } },
+      links: { page: { collection: "pages" } }
+    }),
+    {
+      markdown: "Resolved Markdown",
+      references: { source: { collection: "sources" } },
+      links: { page: { collection: "pages" } }
+    }
+  );
+  assert.deepEqual(resolvedMarkdown({ markdown: "Legacy" }), {
+    markdown: "Legacy",
+    references: {},
+    links: {}
+  });
+  assert.deepEqual(resolvedMarkdown(null), {
+    markdown: "",
+    references: {},
+    links: {}
+  });
 });
