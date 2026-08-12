@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import test from "node:test";
@@ -26,8 +27,7 @@ function visitIdentities(
   value: unknown,
   location: string,
   definitions: IdentityLocation[],
-  references: IdentityLocation[],
-  isRecordRoot = false
+  references: IdentityLocation[]
 ): void {
   if (Array.isArray(value)) {
     value.forEach((entry, index) => {
@@ -41,7 +41,7 @@ function visitIdentities(
     const entryLocation = `${location}.${key}`;
     if (
       typeof entry === "string" &&
-      (key === "content_id" || (key === "id" && !isRecordRoot))
+      (key === "content_id" || key === "id")
     ) {
       definitions.push({ location: entryLocation, value: entry });
     } else if (
@@ -56,7 +56,7 @@ function visitIdentities(
   }
 }
 
-test("all opaque content identities follow the miniCMS ID specification", async () => {
+test("all content identities follow the project ID specification", async () => {
   const config = validateSourceConfig(
     parseYaml(await readFile(path.join(projectRoot, "cms.config.yml"), "utf8"))
   ) as CmsConfig;
@@ -81,7 +81,12 @@ test("all opaque content identities follow the miniCMS ID specification", async 
       const record = parseYaml(
         await readFile(path.join(projectRoot, location), "utf8")
       );
-      visitIdentities(record, location, definitions, references, true);
+      visitIdentities(record, location, definitions, references);
+      assert.match(
+        path.basename(entry.name, `.${extension}`),
+        ID_PATTERN,
+        `${location} filename must match ${ID_PATTERN}`
+      );
     }
   }
 
@@ -109,4 +114,36 @@ test("all opaque content identities follow the miniCMS ID specification", async 
       `${reference.location} references undefined identity ${reference.value}`
     );
   }
+});
+
+test("every media directory is the SHA-256 address of its files", async () => {
+  const mediaRoot = path.join(projectRoot, "content/media");
+  const directories = await readdir(mediaRoot, { withFileTypes: true });
+  let fileCount = 0;
+
+  for (const directory of directories) {
+    if (!directory.isDirectory()) continue;
+    assert.match(
+      directory.name,
+      /^[a-f0-9]{64}$/,
+      `content/media/${directory.name} must be a lowercase SHA-256 directory`
+    );
+    const files = await readdir(path.join(mediaRoot, directory.name), {
+      withFileTypes: true
+    });
+    for (const file of files) {
+      assert.equal(file.isFile(), true, `${directory.name}/${file.name} must be a file`);
+      const digest = createHash("sha256")
+        .update(await readFile(path.join(mediaRoot, directory.name, file.name)))
+        .digest("hex");
+      assert.equal(
+        digest,
+        directory.name,
+        `${directory.name}/${file.name} must match its SHA-256 directory`
+      );
+      fileCount += 1;
+    }
+  }
+
+  assert.ok(fileCount > 0, "at least one content-addressed media file is required");
 });
