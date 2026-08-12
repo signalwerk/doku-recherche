@@ -20,7 +20,14 @@ export default defineConfig({
       name: "SitePreview",
       fileName: () => "preview.js"
     },
-    rollupOptions: {
+    rolldownOptions: {
+      transform: {
+        // PDF.js contains a Node-only fallback guarded out in browsers. The
+        // preview is intentionally an IIFE, where import.meta has no meaning.
+        define: {
+          "import.meta": "{}"
+        }
+      },
       external: ["react", "react/jsx-runtime"],
       output: {
         exports: "named",
