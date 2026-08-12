@@ -326,6 +326,24 @@ h6 {
   margin-top: 0.35em;
 }
 
+.prose ul {
+  padding-inline-start: 0;
+  list-style: none;
+}
+
+.prose ul > li {
+  position: relative;
+}
+
+.prose ul > li::before {
+  position: absolute;
+  inset-inline-end: calc(100% + 0.25em);
+  color: var(--accent);
+  font-size: 0.8em;
+  font-weight: 800;
+  content: "—";
+}
+
 .prose blockquote {
   padding: 0.25rem 0 0.25rem clamp(1.2rem, 3vw, 2.5rem);
   border-left: 0.3rem solid var(--accent);
