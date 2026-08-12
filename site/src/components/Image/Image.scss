@@ -1,0 +1,69 @@
+@use "sass:color";
+
+.media-figure {
+  margin-right: 0;
+  margin-left: 0;
+}
+
+.media-figure__frame {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background:
+    linear-gradient(135deg, rgb(21 21 20 / 6%) 25%, transparent 25%) 0 0 / 12px 12px,
+    var(--paper-soft);
+}
+
+.media-figure__frame > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.media-figure--original .media-figure__frame > img {
+  height: auto;
+}
+
+.media-figure__frame--css-crop > img {
+  position: absolute;
+  height: auto;
+  object-fit: initial;
+}
+
+.media-figure figcaption {
+  display: grid;
+  grid-template-columns: 1.15rem 1fr;
+  min-width: 0;
+  gap: 0.75rem;
+  max-width: 45rem;
+  margin-top: 0.8rem;
+  color: var(--ink-soft);
+  font-size: 0.83rem;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.media-figure figcaption > * {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.media-figure figcaption::before {
+  content: "↳";
+  color: var(--accent);
+  font-weight: 800;
+}
+
+.media-figure__missing {
+  display: grid;
+  gap: 0.35rem;
+  min-height: 9rem;
+  align-content: center;
+  justify-items: start;
+  padding: 1.25rem;
+  border: 1px dashed var(--accent);
+  color: var(--accent-dark);
+  background: color.change(#b92822, $alpha: 0.055);
+  font-size: 0.85rem;
+}

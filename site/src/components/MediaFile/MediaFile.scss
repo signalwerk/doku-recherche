@@ -1,0 +1,62 @@
+@use "sass:color";
+
+.file-card {
+  max-width: var(--content-width);
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: clamp(4rem, 10vw, 9rem) var(--gutter);
+}
+
+.file-card h1 {
+  width: min(16ch, 100%);
+  min-width: 0;
+  max-width: 100%;
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-size: clamp(2.5rem, 6vw, 6.5rem);
+  font-weight: 800;
+  hyphens: auto;
+  line-height: 0.88;
+  letter-spacing: 0;
+  text-wrap: balance;
+}
+
+.file-card > p:not(.eyebrow) {
+  max-width: var(--measure);
+  margin: 2rem 0;
+  font-size: 1.15rem;
+  line-height: 1.55;
+}
+
+.file-card__link {
+  display: flex;
+  width: min(100%, 32rem);
+  justify-content: space-between;
+  padding: 1rem 0;
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+  font-weight: 750;
+  text-decoration: none;
+}
+
+.content-missing {
+  display: grid;
+  gap: 0.35rem;
+  min-height: 9rem;
+  align-content: center;
+  justify-items: start;
+  padding: 1.25rem;
+  border: 1px dashed var(--accent);
+  color: var(--accent-dark);
+  background: color.change(#b92822, $alpha: 0.055);
+  font-size: 0.85rem;
+}
+
+@media (max-width: 35rem) {
+  .file-card h1 {
+    word-break: break-word;
+    font-size: clamp(2.65rem, 13vw, 4.5rem);
+    letter-spacing: 0;
+    text-wrap: wrap;
+  }
+}

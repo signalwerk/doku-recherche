@@ -1,0 +1,54 @@
+.accordion {
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+}
+
+.accordion + .accordion {
+  margin-top: -1px;
+}
+
+.accordion > summary {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1rem;
+  align-items: center;
+  padding: 1.25rem 0;
+  cursor: pointer;
+  list-style: none;
+}
+
+.accordion > summary::-webkit-details-marker {
+  display: none;
+}
+
+.accordion > summary::after {
+  content: "+";
+  color: var(--accent);
+  font-size: 2rem;
+  font-weight: 300;
+  line-height: 1;
+}
+
+.accordion[open] > summary::after {
+  content: "−";
+}
+
+.accordion__summary {
+  font-size: clamp(1.2rem, 2vw, 1.7rem);
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.accordion__summary > * {
+  margin: 0;
+  font: inherit;
+}
+
+.accordion__details {
+  max-width: var(--measure);
+  padding: 0 0 2rem clamp(1rem, 4vw, 4rem);
+}
+
+.accordion__details > * + * {
+  margin-top: 1.6rem;
+}

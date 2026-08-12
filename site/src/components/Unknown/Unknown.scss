@@ -1,0 +1,15 @@
+.unknown-content {
+  padding: 1.2rem;
+  border: 2px solid var(--accent);
+  color: var(--accent-dark);
+  background: var(--paper-pure);
+}
+
+.unknown-content pre {
+  max-width: 100%;
+  padding: 0.8rem;
+  overflow: auto;
+  color: var(--paper-pure);
+  background: var(--ink);
+  font-size: 0.75rem;
+}

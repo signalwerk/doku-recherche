@@ -1,0 +1,35 @@
+.content-box {
+  padding: clamp(1.5rem, 4vw, 4rem);
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+}
+
+.content-box--paper {
+  background: var(--paper-pure);
+}
+
+.content-box--soft {
+  background: var(--paper-soft);
+}
+
+.content-box--accent {
+  color: var(--paper-pure);
+  background: var(--accent-dark);
+  border-color: var(--accent-dark);
+}
+
+.content-box--accent a,
+.content-box--accent .eyebrow {
+  color: inherit;
+}
+
+.content-box > .content-slot > * + * {
+  margin-top: 1.75rem;
+}
+
+@media (max-width: 35rem) {
+  .content-box {
+    margin-right: calc(var(--gutter) * -1);
+    margin-left: calc(var(--gutter) * -1);
+  }
+}

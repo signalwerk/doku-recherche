@@ -1,0 +1,11 @@
+.content-slot {
+  min-width: 0;
+}
+
+[data-minicms-hidden="true"] {
+  opacity: 0.42;
+}
+
+[data-minicms-hidden="true"] [data-minicms-hidden="true"] {
+  opacity: 1;
+}

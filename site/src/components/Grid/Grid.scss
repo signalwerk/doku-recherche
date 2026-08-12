@@ -1,0 +1,17 @@
+.content-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: clamp(1rem, 2.5vw, 2.5rem);
+  align-items: start;
+}
+
+.content-grid--full-width {
+  width: calc(100vw - (2 * var(--gutter)));
+  max-width: var(--content-width);
+  margin-left: 50%;
+  transform: translateX(-50%);
+}
+
+.content-grid h2 {
+  font-size: clamp(2rem, 3.5vw, 3.8rem);
+}

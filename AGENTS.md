@@ -8,8 +8,19 @@ required.
 
 - `cms.config.yml` is the only editable CMS configuration.
 - `content/` contains committed complete YAML records and published media.
-- `site/` owns Astro routes, the React renderer, project preview, styles, and
-  the static `/admin/` host.
+- `site/` owns Astro routes, layouts, the React renderer, project preview,
+  styles, and the static `/admin/` host.
+- Every configured node type has one project-owned
+  `site/src/components/<Type>/<Type>.tsx` renderer and colocated
+  `<Type>.scss`; `Unknown` follows the same convention. Keep
+  `site/src/render/Renderer.tsx` limited to the registry and recursive
+  dispatch, and keep shared slot helpers in `site/src/render/slots.tsx`.
+  `site/src/styles/site.scss` is the ordered Sass entry manifest, while
+  `_global.scss` and `_typography.scss` own only cross-component foundations.
+- Astro document chrome belongs in
+  `site/src/layouts/Document/Document.astro`. Public and admin endpoints remain
+  route files below `site/src/pages/`; layouts and routes are not CMS node
+  renderers.
 - `miniCMS/` and `miniCMS-api/` are independent pinned Git submodules. Follow
   their `README.md` and `AGENTS.md`; do not add project behavior to them.
 - `miniCMS-api` is loopback-only during development and is never deployed to
@@ -23,6 +34,12 @@ required.
   website code.
 - Static output and the unsaved editor preview use the same recursive React
   renderer and project Sass.
+- The website and its isolated preview bundle the project-owned Geist variable
+  font from `site/src/assets/fonts/geist/`. Geist is the document-wide family,
+  including code surfaces, and the root enables the `alt-l`, `alt-a`, and
+  `alt-r` named styleset alternates. Keep font URLs in source Sass so Vite
+  rewrites them correctly for GitHub Pages base paths and inlines them into the
+  preview bundle.
 - Public routes are derived from `content_id`, `parent_id`, and `slug`. Route
   hierarchy errors and duplicate paths must fail the build.
 - Keep the two miniCMS ID categories distinct. A record's top-level `id` is a

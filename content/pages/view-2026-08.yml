@@ -1,0 +1,24 @@
+id: view-2026-08
+type: page
+properties:
+  content_id: 4z5kspmtoraj3d4
+  title: Zwei frühe kommunistische Schweizer Verlage
+  slug: view-2026-08
+  navigation_title: ""
+  hidden: false
+  hide_in_navigation: true
+  description: ""
+  keywords: ""
+  noindex: false
+  nofollow: false
+  layout: default
+  parent_id: y4fg3vi13emgbo4
+order: 0
+slots:
+  content:
+    - id: c75sr0drchk1vy7
+      type: pdf_viewer
+      properties:
+        asset: wgs1rlrkn925lb8
+        hidden: false
+      slots: {}

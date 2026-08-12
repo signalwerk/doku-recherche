@@ -1,0 +1,45 @@
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0 0 0.65em;
+  overflow-wrap: anywhere;
+  font-weight: 760;
+  line-height: 0.98;
+  letter-spacing: 0;
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: clamp(3rem, 7vw, 7rem);
+}
+
+h2 {
+  font-size: clamp(2.15rem, 5vw, 4.75rem);
+}
+
+h3 {
+  font-size: clamp(1.75rem, 3.4vw, 3.1rem);
+}
+
+h4 {
+  font-size: clamp(1.4rem, 2.3vw, 2.15rem);
+}
+
+h5,
+h6 {
+  font-size: clamp(1.1rem, 1.6vw, 1.45rem);
+  letter-spacing: 0;
+}
+
+.eyebrow {
+  margin: 0 0 1.15rem;
+  color: var(--accent);
+  font-size: clamp(0.9rem, 1.5vw, 1.15rem);
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}

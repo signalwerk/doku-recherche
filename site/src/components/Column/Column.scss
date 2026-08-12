@@ -1,0 +1,14 @@
+.content-column {
+  grid-column: var(--column-start, auto) / span var(--column-span, 12);
+  min-width: 0;
+}
+
+.content-column > .content-slot > * + * {
+  margin-top: 1.75rem;
+}
+
+@media (max-width: 64rem) {
+  .content-column {
+    grid-column: 1 / -1;
+  }
+}

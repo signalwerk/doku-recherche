@@ -38,3 +38,8 @@ export type RendererComponentProps = {
 
 export type RendererComponent = ComponentType<RendererComponentProps>;
 export type RendererRegistry = Record<string, RendererComponent>;
+
+export function propertyText(node: ContentNode, name: string): string {
+  const value = node.properties[name];
+  return typeof value === "string" ? value : String(value ?? "");
+}

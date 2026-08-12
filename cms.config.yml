@@ -137,6 +137,7 @@ node_types:
           - title
           - text
           - image
+          - pdf_viewer
           - box
           - accordion
           - grid
@@ -413,6 +414,36 @@ node_types:
         label: Hide content
         widget: boolean
         default: false
+  pdf_viewer:
+    label: PDF viewer
+    kind: content
+    icon: book-open
+    fields:
+      asset:
+        label: PDF
+        widget: reference
+        collection: files
+        required: true
+      hidden:
+        label: Hide content
+        widget: boolean
+        default: false
+    views:
+      detail:
+        panels:
+          inspector:
+            label: Inspector
+            groups:
+              content:
+                label: PDF
+                icon: book-open
+                fields:
+                  - asset
+              visibility:
+                label: Visibility
+                icon: settings
+                fields:
+                  - hidden
   box:
     label: Box
     kind: content
@@ -440,6 +471,7 @@ node_types:
           - title
           - text
           - image
+          - pdf_viewer
           - grid
   accordion:
     label: Accordion
@@ -467,6 +499,7 @@ node_types:
           - title
           - text
           - image
+          - pdf_viewer
           - box
           - grid
   grid:
@@ -569,7 +602,9 @@ node_types:
           - title
           - text
           - image
+          - pdf_viewer
           - box
+          - accordion
           - grid
 collections:
   pages:

@@ -1,0 +1,113 @@
+.pdf-viewer {
+  width: 100%;
+  min-width: 0;
+  outline-offset: 0.4rem;
+}
+
+.pdf-viewer__stage {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(0.35rem, 1.5vw, 1.25rem);
+  align-items: center;
+  width: 100%;
+}
+
+.pdf-viewer__stage[data-page-count="1"] {
+  grid-template-columns: minmax(0, min(100%, 32rem));
+  justify-content: center;
+}
+
+.pdf-viewer__page {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: var(--paper-pure);
+  box-shadow: 0 0.2rem 0.8rem rgb(21 21 20 / 10%);
+}
+
+.pdf-viewer__page[hidden] {
+  display: none;
+}
+
+.pdf-viewer__page canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: var(--paper-pure);
+}
+
+.pdf-viewer__message {
+  min-height: 1.5em;
+  margin: 0.8rem 0 0;
+  color: var(--ink-soft);
+  font-size: 0.85rem;
+}
+
+.pdf-viewer__message:empty {
+  min-height: 0;
+  margin: 0;
+}
+
+.pdf-viewer__controls {
+  display: grid;
+  grid-template-columns: auto minmax(8rem, 1fr) auto auto;
+  gap: 0.5rem;
+  align-items: center;
+  margin-top: 0.8rem;
+  font-size: 0.9rem;
+}
+
+.pdf-viewer__controls button,
+.pdf-viewer__controls a {
+  min-height: 2.75rem;
+  padding: 0.65rem 0.85rem;
+  border: 1px solid var(--ink);
+  border-radius: 0;
+  color: var(--ink);
+  background: var(--paper-pure);
+  font-weight: 700;
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.pdf-viewer__controls button:hover:not(:disabled),
+.pdf-viewer__controls a:hover {
+  color: var(--paper-pure);
+  background: var(--ink);
+}
+
+.pdf-viewer__controls button:disabled {
+  border-color: var(--line);
+  color: var(--line);
+  cursor: default;
+}
+
+.pdf-viewer__controls span {
+  text-align: center;
+}
+
+.pdf-viewer__missing {
+  min-height: 10rem;
+  margin: 0;
+  padding: 1.25rem;
+  border: 1px dashed var(--accent);
+  color: var(--accent-dark);
+  background: var(--paper-pure);
+}
+
+@media (max-width: 38rem) {
+  .pdf-viewer__controls {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .pdf-viewer__controls span {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+
+  .pdf-viewer__controls a {
+    grid-column: 1 / -1;
+    text-align: center;
+  }
+}
