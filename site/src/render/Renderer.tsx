@@ -83,7 +83,6 @@ function Page({
       <header className="site-header">
         <p className="site-header__mark" aria-label={siteName}>
           <span aria-hidden="true">D</span>
-          <span>{siteName}</span>
         </p>
         <div className="site-header__rule" aria-hidden="true" />
         <p className="site-header__descriptor">Dokumente · Kontexte · Spuren</p>
@@ -94,8 +93,7 @@ function Page({
       </div>
       <SlotGroups slots={slots} omitted={["content"]} />
       <footer className="site-footer">
-        <span>{siteName}</span>
-        <span aria-hidden="true">Archiv · Zürich</span>
+        <span>Archiv · Zürich</span>
       </footer>
     </article>
   );
