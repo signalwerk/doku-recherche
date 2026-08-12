@@ -35,3 +35,13 @@ test("full-width grids use the fluid canvas without a content-width cap", async 
   assert.match(rule, /width:\s*calc\(100% - \(2 \* var\(--gutter\)\)\);/);
   assert.doesNotMatch(rule, /max-width|transform/);
 });
+
+test("body paragraphs use the configured asymmetric vertical rhythm", async () => {
+  const textStyles = await readFile(
+    path.join(componentsRoot, "Text/Text.scss"),
+    "utf8"
+  );
+  const paragraph = /\.prose p\s*{([^}]*)}/s.exec(textStyles)?.[1] ?? "";
+
+  assert.match(paragraph, /margin:\s*0\.65em 0 1\.1em;/);
+});
