@@ -66,6 +66,11 @@ required.
 - Persist image identity as `{hash, filename}`. Resolved `src` values are
   transient and must never be written to YAML.
 - Hidden nodes remain selectable in authoring but are absent publicly.
+- The page canvas is fluid. Header, footer, and `default` grids share the
+  `--content-width` constraint inside the standard gutters; `full_width` grids
+  use the complete canvas minus only those gutters. Page records should put
+  their primary content inside an explicit grid rather than restoring a width
+  cap on `.page`.
 
 ## Commands
 

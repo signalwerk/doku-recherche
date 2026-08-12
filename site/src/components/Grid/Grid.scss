@@ -5,11 +5,16 @@
   align-items: start;
 }
 
+.content-grid--default {
+  width: min(calc(100% - (2 * var(--gutter))), var(--content-width));
+  margin-right: auto;
+  margin-left: auto;
+}
+
 .content-grid--full-width {
-  width: calc(100vw - (2 * var(--gutter)));
-  max-width: var(--content-width);
-  margin-left: 50%;
-  transform: translateX(-50%);
+  width: calc(100% - (2 * var(--gutter)));
+  margin-right: auto;
+  margin-left: auto;
 }
 
 .content-grid h2 {

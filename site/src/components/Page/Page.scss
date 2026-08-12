@@ -1,17 +1,19 @@
 .page {
   display: flex;
   flex-direction: column;
-  width: min(100%, calc(var(--content-width) + (2 * var(--gutter))));
+  width: 100%;
   min-height: 100vh;
   min-height: 100svh;
-  margin: 0 auto;
-  padding: 0 var(--gutter);
+  margin: 0;
 }
 
 .site-header {
   display: flex;
   align-items: center;
+  width: min(calc(100% - (2 * var(--gutter))), var(--content-width));
   min-height: 6.4rem;
+  margin-right: auto;
+  margin-left: auto;
   border-bottom: 1px solid var(--ink);
 }
 
@@ -58,7 +60,10 @@
   gap: 0.5rem 2rem;
   align-items: baseline;
   justify-content: space-between;
+  width: min(calc(100% - (2 * var(--gutter))), var(--content-width));
   margin-top: auto;
+  margin-right: auto;
+  margin-left: auto;
   padding: 1.5rem 0 2.5rem;
   border-top: 1px solid var(--ink);
   color: var(--ink-soft);

@@ -1,0 +1,37 @@
+import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
+import path from "node:path";
+import test from "node:test";
+import { fileURLToPath } from "node:url";
+
+const componentsRoot = path.resolve(
+  path.dirname(fileURLToPath(import.meta.url)),
+  "../src/components"
+);
+const constrainedWidth =
+  "width: min(calc(100% - (2 * var(--gutter))), var(--content-width));";
+
+test("the page canvas is fluid while chrome and default grids stay constrained", async () => {
+  const [pageStyles, gridStyles] = await Promise.all([
+    readFile(path.join(componentsRoot, "Page/Page.scss"), "utf8"),
+    readFile(path.join(componentsRoot, "Grid/Grid.scss"), "utf8")
+  ]);
+
+  assert.match(pageStyles, /\.page\s*{[^}]*width:\s*100%;/s);
+  const header = /\.site-header\s*{([^}]*)}/s.exec(pageStyles)?.[1] ?? "";
+  const footer = /\.site-footer\s*{([^}]*)}/s.exec(pageStyles)?.[1] ?? "";
+  const defaultGrid = /\.content-grid--default\s*{([^}]*)}/s.exec(gridStyles)?.[1] ?? "";
+  assert.ok(header.includes(constrainedWidth));
+  assert.ok(footer.includes(constrainedWidth));
+  assert.ok(defaultGrid.includes(constrainedWidth));
+});
+
+test("full-width grids use the fluid canvas without a content-width cap", async () => {
+  const gridStyles = await readFile(
+    path.join(componentsRoot, "Grid/Grid.scss"),
+    "utf8"
+  );
+  const rule = /\.content-grid--full-width\s*{([^}]*)}/s.exec(gridStyles)?.[1] ?? "";
+  assert.match(rule, /width:\s*calc\(100% - \(2 \* var\(--gutter\)\)\);/);
+  assert.doesNotMatch(rule, /max-width|transform/);
+});

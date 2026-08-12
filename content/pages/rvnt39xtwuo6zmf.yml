@@ -16,9 +16,24 @@ properties:
 order: 0
 slots:
   content:
-    - id: c75sr0drchk1vy7
-      type: pdf_viewer
+    - id: 0v573lr4ktdamn8
+      type: grid
       properties:
-        asset: wgs1rlrkn925lb8
+        layout: full_width
         hidden: false
-      slots: {}
+      slots:
+        columns:
+          - id: kb9gw5y302dn96n
+            type: column
+            properties:
+              width: "12"
+              start: ""
+              hidden: false
+            slots:
+              content:
+                - id: c75sr0drchk1vy7
+                  type: pdf_viewer
+                  properties:
+                    asset: wgs1rlrkn925lb8
+                    hidden: false
+                  slots: {}
