@@ -73,9 +73,6 @@ export default function PdfViewer({
             <button type="button" data-pdf-next="" disabled>
               Weiter
             </button>
-            <a href={pdf.src} target="_blank" rel="noopener noreferrer">
-              PDF öffnen
-            </a>
           </div>
         </>
       ) : (

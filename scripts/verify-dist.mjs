@@ -13,7 +13,6 @@ const required = [
   "admin/index.html",
   "admin/cms.config.yml",
   "admin/preview.js",
-  "view-2026-08/index.html",
   bibliographyPath
 ];
 
@@ -33,15 +32,31 @@ if (builtBibliographyHash !== bibliographyHash) {
   throw new Error("The published bibliography PDF does not match its content address.");
 }
 
-const viewerHtml = await readFile(
-  path.join(outputRoot, "view-2026-08/index.html"),
-  "utf8"
-);
+async function findViewerPages(directory) {
+  const matches = [];
+  for (const entry of await readdir(directory, { withFileTypes: true })) {
+    const absolutePath = path.join(directory, entry.name);
+    if (entry.isDirectory()) {
+      matches.push(...await findViewerPages(absolutePath));
+    } else if (entry.isFile() && entry.name.endsWith(".html")) {
+      const html = await readFile(absolutePath, "utf8");
+      if (html.includes('data-renderer-type="pdf_viewer"')) {
+        matches.push({ absolutePath, html });
+      }
+    }
+  }
+  return matches;
+}
+
+const viewerPages = await findViewerPages(outputRoot);
+if (viewerPages.length !== 1) {
+  throw new Error(
+    `Expected exactly one rendered PDF viewer page, found ${viewerPages.length}.`
+  );
+}
+const viewerHtml = viewerPages[0].html;
 const expectedPdfHref = `${normalizedBasePath}/${bibliographyPath}`;
-if (
-  !viewerHtml.includes('data-renderer-type="pdf_viewer"') ||
-  !viewerHtml.includes(`data-pdf-src="${expectedPdfHref}"`)
-) {
+if (!viewerHtml.includes(`data-pdf-src="${expectedPdfHref}"`)) {
   throw new Error("The PDF viewer page does not reference the base-aware bibliography PDF.");
 }
 

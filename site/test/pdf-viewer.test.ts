@@ -1,5 +1,8 @@
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
+import path from "node:path";
 import test from "node:test";
+import { fileURLToPath } from "node:url";
 
 import {
   lastSpreadStart,
@@ -35,4 +38,15 @@ test("spread navigation stays on valid book spreads", () => {
 test("spread status is concise and localized", () => {
   assert.equal(spreadStatus([1], 54), "Seite 1 von 54");
   assert.equal(spreadStatus([2, 3], 54), "Seiten 2–3 von 54");
+});
+
+test("the viewer keeps navigation minimal without an external PDF button", async () => {
+  const component = await readFile(
+    path.resolve(
+      path.dirname(fileURLToPath(import.meta.url)),
+      "../src/components/PdfViewer/PdfViewer.tsx"
+    ),
+    "utf8"
+  );
+  assert.doesNotMatch(component, /PDF öffnen/);
 });

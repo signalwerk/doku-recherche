@@ -50,15 +50,14 @@
 
 .pdf-viewer__controls {
   display: grid;
-  grid-template-columns: auto minmax(8rem, 1fr) auto auto;
+  grid-template-columns: auto minmax(8rem, 1fr) auto;
   gap: 0.5rem;
   align-items: center;
   margin-top: 0.8rem;
   font-size: 0.9rem;
 }
 
-.pdf-viewer__controls button,
-.pdf-viewer__controls a {
+.pdf-viewer__controls button {
   min-height: 2.75rem;
   padding: 0.65rem 0.85rem;
   border: 1px solid var(--ink);
@@ -71,8 +70,7 @@
   cursor: pointer;
 }
 
-.pdf-viewer__controls button:hover:not(:disabled),
-.pdf-viewer__controls a:hover {
+.pdf-viewer__controls button:hover:not(:disabled) {
   color: var(--paper-pure);
   background: var(--ink);
 }
@@ -104,10 +102,5 @@
   .pdf-viewer__controls span {
     grid-column: 1 / -1;
     grid-row: 1;
-  }
-
-  .pdf-viewer__controls a {
-    grid-column: 1 / -1;
-    text-align: center;
   }
 }
