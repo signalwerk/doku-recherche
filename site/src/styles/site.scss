@@ -132,8 +132,11 @@ a:hover {
 }
 
 .page {
+  display: flex;
+  flex-direction: column;
   width: min(100%, calc(var(--content-width) + (2 * var(--gutter))));
   min-height: 100vh;
+  min-height: 100svh;
   margin: 0 auto;
   padding: 0 var(--gutter);
 }
@@ -611,6 +614,7 @@ h6 {
 }
 
 .site-footer {
+  margin-top: auto;
   padding: 1.5rem 0 2.5rem;
   border-top: 1px solid var(--ink);
   color: var(--ink-soft);
