@@ -32,13 +32,13 @@
 
 .prose ul > li {
   position: relative;
+  padding-inline-start: 1.5em;
 }
 
 .prose ul > li::before {
   position: absolute;
-  inset-inline-end: calc(100% + 0.25em);
+  inset-inline-start: 0;
   color: var(--accent);
-  font-size: 0.8em;
   font-weight: 800;
   content: "—";
 }
