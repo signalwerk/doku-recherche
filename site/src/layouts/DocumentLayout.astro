@@ -1,0 +1,92 @@
+---
+import "../styles/site.scss";
+
+interface NavigationItem {
+  label: string;
+  href: string;
+  active?: boolean;
+}
+
+interface Props {
+  siteName: string;
+  locale: string;
+  pageTitle: string;
+  description?: string;
+  keywords?: string;
+  noindex?: boolean;
+  nofollow?: boolean;
+  canonicalPath: string;
+  navigation?: NavigationItem[];
+}
+
+const {
+  siteName,
+  locale,
+  pageTitle,
+  description = "",
+  keywords = "",
+  noindex = false,
+  nofollow = false,
+  canonicalPath,
+  navigation = []
+} = Astro.props;
+
+const basePath = import.meta.env.BASE_URL === "/"
+  ? ""
+  : `/${import.meta.env.BASE_URL.replace(/^\/+|\/+$/g, "")}`;
+const normalizedPath = canonicalPath === "/"
+  ? "/"
+  : `/${canonicalPath.replace(/^\/+|\/+$/g, "")}`;
+const canonicalHref = `${basePath}${normalizedPath}` || "/";
+const canonicalUrl = new URL(canonicalHref, Astro.site ?? Astro.url.origin);
+const faviconHref = `${basePath}/favicon.svg`;
+const documentTitle = pageTitle === siteName
+  ? siteName
+  : `${pageTitle} — ${siteName}`;
+const robots = `${noindex ? "noindex" : "index"},${nofollow ? "nofollow" : "follow"}`;
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#f3f0e8" />
+    <link rel="icon" type="image/svg+xml" href={faviconHref} />
+    <title>{documentTitle}</title>
+    {description && <meta name="description" content={description} />}
+    {keywords && <meta name="keywords" content={keywords} />}
+    <meta name="robots" content={robots} />
+    <link rel="canonical" href={canonicalUrl} />
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Zum Inhalt springen</a>
+    {navigation.length > 1 && (
+      <nav class="site-shell-navigation-wrap" aria-label="Hauptnavigation">
+          <ul class="site-shell-navigation">
+            {navigation.map((entry) => (
+              <li>
+                <a
+                  href={entry.href}
+                  aria-current={entry.active ? "page" : undefined}
+                >
+                  {entry.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+      </nav>
+    )}
+    <main id="main-content">
+      <slot />
+    </main>
+    <script>
+      if (import.meta.hot) {
+        import.meta.hot.on("doku-recherche:content-changed", () => {
+          window.location.reload();
+        });
+      }
+    </script>
+  </body>
+</html>

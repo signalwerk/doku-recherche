@@ -1,0 +1,33 @@
+id: home
+type: page
+order: 0
+properties:
+  content_id: y4fg3vi13emgbo4
+  parent_id: null
+  title: Dokumentationsstelle für historische Recherchen
+  slug: ""
+  navigation_title: Startseite
+  hidden: false
+  hide_in_navigation: false
+  description: Dokumentationsstelle für historische Recherchen in Zürich.
+  keywords: Geschichte, Recherche, Dokumentation, Zürich
+  noindex: false
+  nofollow: false
+  layout: default
+slots:
+  content:
+    - id: 8tqio8epg0x01kl
+      type: title
+      properties:
+        title: Geschichte recherchieren, dokumentieren und zugänglich machen
+        element: h2
+        hidden: false
+      slots: {}
+    - id: mnu7f3bvgq19kum
+      type: text
+      properties:
+        text: >-
+          Diese Website befindet sich im Aufbau. Inhalte können direkt mit miniCMS bearbeitet und
+          als statische Seiten veröffentlicht werden.
+        hidden: false
+      slots: {}

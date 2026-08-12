@@ -1,0 +1,29 @@
+{
+  "name": "doku-recherche-content",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "site"
+  ],
+  "scripts": {
+    "dev": "node --env-file-if-exists=.env --run=dev:processes",
+    "dev:processes": "concurrently --kill-others --names site,cms,api \"npm run dev:site\" \"npm run dev:cms\" \"npm run dev:api\"",
+    "dev:site": "npm run dev --workspace @site/doku-recherche",
+    "dev:cms": "node ./miniCMS/bin/minicms.mjs dev",
+    "dev:api": "node ./miniCMS-api/bin/minicms-api.mjs dev",
+    "build": "npm run check:site && npm run build:site",
+    "build:site": "npm run build --workspace @site/doku-recherche",
+    "build:pages": "npm run build && node scripts/verify-dist.mjs",
+    "check:site": "npm run check --workspace @site/doku-recherche",
+    "test": "npm run check:site && npm test --workspace @site/doku-recherche",
+    "test:cms": "node ./miniCMS/bin/minicms.mjs test",
+    "test:api": "npm --prefix miniCMS-api test"
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.4"
+  },
+  "engines": {
+    "node": ">=24"
+  }
+}

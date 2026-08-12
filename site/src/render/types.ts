@@ -1,0 +1,40 @@
+import type { ContentData, ContentNode } from "@signalwerk/minicms/content";
+import type {
+  ComponentType,
+  HTMLAttributes,
+  ReactNode,
+  RefCallback
+} from "react";
+
+export type AuthoringProps = HTMLAttributes<HTMLElement> & {
+  ref?: RefCallback<HTMLElement>;
+  "data-minicms-node-id"?: string;
+  "data-minicms-node-type"?: string;
+  "data-minicms-selected"?: string;
+  "data-minicms-hidden"?: string;
+};
+
+export type FocusHandler = (nodeId: string) => AuthoringProps;
+
+export type PreviewRendererProps = {
+  data: ContentData;
+  focus: FocusHandler;
+};
+
+export type RendererProps = {
+  data: ContentData;
+  focus?: FocusHandler;
+};
+
+export type RenderedSlots = Record<string, ReactNode[]>;
+
+export type RendererComponentProps = {
+  node: ContentNode;
+  slots: RenderedSlots;
+  data: ContentData;
+  authoring: boolean;
+  authoringProps: AuthoringProps;
+};
+
+export type RendererComponent = ComponentType<RendererComponentProps>;
+export type RendererRegistry = Record<string, RendererComponent>;

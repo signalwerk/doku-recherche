@@ -1,0 +1,6 @@
+[submodule "miniCMS"]
+	path = miniCMS
+	url = https://github.com/signalwerk/miniCMS.git
+[submodule "miniCMS-api"]
+	path = miniCMS-api
+	url = https://github.com/signalwerk/miniCMS.server.git

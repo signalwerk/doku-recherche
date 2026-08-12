@@ -1,0 +1,89 @@
+---
+import Renderer from "../render/Renderer";
+import DocumentLayout from "../layouts/DocumentLayout.astro";
+import { loadRepository } from "../model/repository";
+import {
+  buildRouteManifest,
+  type RoutePath
+} from "../model/routes";
+
+export async function getStaticPaths() {
+  const repository = await loadRepository();
+  return buildRouteManifest(
+    repository.pages.map((page) => page.item),
+    { basePath: import.meta.env.BASE_URL }
+  ).staticPaths();
+}
+
+interface Props {
+  routePath: RoutePath;
+}
+
+const { routePath } = Astro.props;
+
+// Development deliberately reloads YAML here. getStaticPaths props contain no
+// record snapshot, so an editor save cannot leave the rendered page stale.
+const repository = await loadRepository();
+const manifest = buildRouteManifest(
+  repository.pages.map((page) => page.item),
+  { basePath: import.meta.env.BASE_URL }
+);
+const route = manifest.lookup(routePath);
+
+if (!route) {
+  throw new Error(`Public route disappeared while rendering: ${routePath}`);
+}
+
+if (route.kind === "redirect") {
+  return Astro.redirect(route.redirectTo, 302);
+}
+
+const data = repository.pages.find(
+  (page) => page.item.properties.content_id === route.contentId
+);
+if (!data) {
+  throw new Error(`No resolved content envelope exists for route ${routePath}`);
+}
+
+const properties = data.item.properties;
+const pageTitle = typeof properties.title === "string" && properties.title
+  ? properties.title
+  : data.item.id;
+const siteName = typeof data.config.site?.name === "string"
+  ? data.config.site.name
+  : "Dokumentationsstelle für historische Recherchen";
+const locale = typeof data.config.site?.locale === "string"
+  ? data.config.site.locale
+  : "de-CH";
+const navigation = manifest.routes
+  .filter(
+    (entry) =>
+      entry.kind === "page" &&
+      entry.record.properties.hide_in_navigation !== true
+  )
+  .map((entry) => ({
+    label:
+      typeof entry.record.properties.navigation_title === "string" &&
+      entry.record.properties.navigation_title
+        ? entry.record.properties.navigation_title
+        : typeof entry.record.properties.title === "string"
+          ? entry.record.properties.title
+          : entry.record.id,
+    href: entry.href,
+    active: entry.path === route.path
+  }));
+---
+
+<DocumentLayout
+  siteName={siteName}
+  locale={locale}
+  pageTitle={pageTitle}
+  description={typeof properties.description === "string" ? properties.description : ""}
+  keywords={typeof properties.keywords === "string" ? properties.keywords : ""}
+  noindex={properties.noindex === true}
+  nofollow={properties.nofollow === true}
+  canonicalPath={route.path}
+  navigation={navigation}
+>
+  <Renderer data={data} />
+</DocumentLayout>

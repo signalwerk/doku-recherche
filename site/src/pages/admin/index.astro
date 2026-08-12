@@ -1,0 +1,131 @@
+---
+export const prerender = true;
+
+const isDevelopment = import.meta.env.DEV;
+const adminPort = __MINICMS_ADMIN_PORT__;
+const providerScriptUrl = isDevelopment
+  ? __MINICMS_DEV_SCRIPT_URL__ ||
+    `http://127.0.0.1:${adminPort}/src/main.jsx`
+  : __MINICMS_SCRIPT_URL__ ||
+    "https://signalwerk.github.io/miniCMS/minicms.js";
+const connectorInitialization = isDevelopment
+  ? {
+      environment: "development",
+      connectorOptions: {
+        development: { apiUrl: __MINICMS_API_ORIGIN__ }
+      }
+    }
+  : {};
+const basePath = import.meta.env.BASE_URL.replace(/\/+$/g, "");
+const faviconHref = `${basePath}/favicon.svg`;
+---
+
+<!doctype html>
+<html lang="de-CH">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="icon" type="image/svg+xml" href={faviconHref} />
+    <title>miniCMS</title>
+    <style>
+      :root {
+        color-scheme: light;
+        font-family: system-ui, sans-serif;
+      }
+
+      body {
+        margin: 0;
+      }
+
+      .bootstrap-status {
+        box-sizing: border-box;
+        margin: 2rem auto;
+        max-width: 42rem;
+        padding: 1rem;
+      }
+
+      .bootstrap-status[data-state="error"] {
+        border: 1px solid #b42318;
+        color: #b42318;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root">
+      <p class="bootstrap-status" id="bootstrap-status" role="status">
+        miniCMS wird geladen …
+      </p>
+    </div>
+
+    <script
+      type="module"
+      is:inline
+      define:vars={{
+        connectorInitialization,
+        isDevelopment,
+        providerScriptUrl
+      }}
+    >
+      const status = document.querySelector("#bootstrap-status");
+
+      function loadClassicScript(url) {
+        return new Promise((resolve, reject) => {
+          const script = document.createElement("script");
+          script.src = url;
+          script.async = false;
+          script.addEventListener("load", resolve, { once: true });
+          script.addEventListener(
+            "error",
+            () => reject(new Error(`Could not load ${url}`)),
+            { once: true }
+          );
+          document.head.append(script);
+        });
+      }
+
+      try {
+        const providerUrl = new URL(providerScriptUrl, document.baseURI).href;
+
+        if (isDevelopment) {
+          const refreshUrl = new URL("/@react-refresh", providerUrl).href;
+          const { default: RefreshRuntime } = await import(refreshUrl);
+          RefreshRuntime.injectIntoGlobalHook(window);
+          window.$RefreshReg$ = () => {};
+          window.$RefreshSig$ = () => (type) => type;
+          window.__vite_plugin_react_preamble_installed__ = true;
+          await import(providerUrl);
+        } else {
+          await loadClassicScript(providerUrl);
+        }
+
+        if (!window.miniCMS) {
+          throw new Error("The miniCMS provider did not expose window.miniCMS.");
+        }
+
+        const previewUrl = new URL("./preview.js", document.baseURI);
+        await loadClassicScript(previewUrl.href);
+        const ProjectPreview = window.SitePreview?.ProjectPreview;
+        if (typeof ProjectPreview !== "function") {
+          throw new Error("The project preview did not register its component.");
+        }
+
+        window.miniCMS.registerPreview(ProjectPreview);
+        await window.miniCMS.init({
+          target: "#root",
+          configUrl: "./cms.config.yml",
+          ...connectorInitialization
+        });
+      } catch (error) {
+        const message =
+          error instanceof Error ? error.message : "Unknown bootstrap error";
+        if (status) {
+          status.dataset.state = "error";
+          status.setAttribute("role", "alert");
+          status.textContent = `miniCMS konnte nicht gestartet werden: ${message}`;
+        }
+        console.error(error);
+      }
+    </script>
+  </body>
+</html>

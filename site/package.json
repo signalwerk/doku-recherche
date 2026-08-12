@@ -1,0 +1,35 @@
+{
+  "name": "@site/doku-recherche",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "npm run build:preview:dev && ASTRO_DEV_BACKGROUND=1 astro dev --force",
+    "build": "astro build && npm run build:preview",
+    "build:preview": "vite build --config vite.preview.config.ts",
+    "build:preview:dev": "SITE_PREVIEW_OUT_DIR=public/admin vite build --config vite.preview.config.ts",
+    "check": "astro check",
+    "test": "node --test test/*.test.ts"
+  },
+  "dependencies": {
+    "@astrojs/react": "^6.0.2",
+    "@signalwerk/minicms": "file:../miniCMS",
+    "astro": "^7.1.6",
+    "cookie": "^2.0.1",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "react-markdown": "^10.1.0",
+    "sass": "^1.102.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@types/node": "^24.0.0",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
+    "typescript": "^6.0.3",
+    "vite": "^8.0.13"
+  },
+  "engines": {
+    "node": ">=24"
+  }
+}
