@@ -46,7 +46,7 @@ slots:
                   type: text
                   properties:
                     text: |
-                      Publikation anschauen
+                      [Publikation anschauen](minicms://link/pages/4z5kspmtoraj3d4)
                     hidden: false
                   slots: {}
           - id: szeegfvbtl2btkv
@@ -77,10 +77,10 @@ slots:
                     text: >
                       * Recherchen und Publikationen zur revolutionären Arbeiterbewegung.
 
-                      * Recherchen+Publikationen zu proletarisch-revolutionärer
+                      * Recherchen und Publikationen zu proletarisch-revolutionärer
                       Lyrik/Literatur/Dramatik.
 
-                      * Recherchen+Publikationen zum sozialistischen Verlagswesen der Schweiz.
+                      * Recherchen und Publikationen zum sozialistischen Verlagswesen der Schweiz.
 
                       * Recherchen+Aufsätze zur Oktoberrevolution.
                     hidden: false
