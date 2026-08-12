@@ -53,5 +53,6 @@ export function fittedSpreadWidth(
     Number.isFinite(ratio) && ratio > 0 ? ratio : 1
   );
   const narrowestPage = Math.min(...ratios);
-  return Math.min(width, height * narrowestPage * ratios.length);
+  const pageHeight = Math.min(height, width / (2 * narrowestPage));
+  return pageHeight * narrowestPage * Math.min(ratios.length, 2);
 }

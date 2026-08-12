@@ -44,7 +44,14 @@ test("spread status is concise and localized", () => {
 test("spread width is capped by both its container and the visible height", () => {
   assert.equal(Math.round(fittedSpreadWidth(1800, 700, [0.7, 0.7])), 980);
   assert.equal(Math.round(fittedSpreadWidth(800, 700, [0.7, 0.7])), 800);
-  assert.equal(Math.round(fittedSpreadWidth(800, 700, [0.7])), 490);
+  assert.equal(Math.round(fittedSpreadWidth(800, 700, [0.7])), 400);
+});
+
+test("single pages keep the same height as pages in a spread", () => {
+  const coverWidth = fittedSpreadWidth(800, 700, [0.7]);
+  const spreadWidth = fittedSpreadWidth(800, 700, [0.7, 0.7]);
+
+  assert.equal(coverWidth / 0.7, (spreadWidth / 2) / 0.7);
 });
 
 test("the viewer keeps navigation minimal without an external PDF button", async () => {
@@ -71,6 +78,11 @@ test("paired pages touch with one grey divider inside a black outline", async ()
     styles,
     /\.pdf-viewer__stage\s*{[^}]*width:\s*min\(100%, var\(--pdf-stage-width, 100%\)\);/s
   );
+  assert.match(
+    styles,
+    /data-page-count="1"[^}]*{[^}]*grid-template-columns:\s*minmax\(0, 1fr\);/s
+  );
+  assert.doesNotMatch(styles, /data-page-count="1"[^}]*32rem/s);
   assert.match(styles, /\.pdf-viewer__page\s*{[^}]*border:\s*1px solid var\(--ink\);/s);
   assert.match(
     styles,

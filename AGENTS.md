@@ -73,6 +73,8 @@ required.
   alter the visible page or duplicate its accessible page label. Fit each
   spread to both its container width and the viewport height remaining above
   the navigation, so the complete pages and controls stay visible together.
+  Reserve two page slots when calculating that fit so single pages have the
+  same height as pages in a spread and navigation never shifts vertically.
 - The page canvas is fluid. Header, footer, and `default` grids share the
   `--content-width` constraint inside the standard gutters; `full_width` grids
   use the complete canvas minus only those gutters. Page records should put

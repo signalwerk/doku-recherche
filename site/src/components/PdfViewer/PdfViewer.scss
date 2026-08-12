@@ -15,7 +15,7 @@
 }
 
 .pdf-viewer__stage[data-page-count="1"] {
-  grid-template-columns: minmax(0, min(100%, 32rem));
+  grid-template-columns: minmax(0, 1fr);
   justify-content: center;
 }
 
