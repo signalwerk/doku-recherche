@@ -25,7 +25,7 @@ export default function MediaImage({
       {propertyText(node, "title") ? (
         <p className="eyebrow">{propertyText(node, "title")}</p>
       ) : null}
-      <ImageMarkup image={image} authoring={authoring} />
+      <ImageMarkup image={image} authoring={authoring} href={null} />
       <SlotGroups slots={slots} />
     </figure>
   );

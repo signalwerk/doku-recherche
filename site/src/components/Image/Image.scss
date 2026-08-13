@@ -14,6 +14,14 @@
     var(--paper-soft);
 }
 
+.media-figure__link {
+  display: block;
+}
+
+.media-figure__link:focus-visible {
+  outline-offset: 0.3rem;
+}
+
 .media-figure__frame > img {
   display: block;
   width: 100%;

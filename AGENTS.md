@@ -68,6 +68,12 @@ required.
   identity. Never invent any ID from a title, slug, date, counter, or UUID.
 - Persist image identity as `{hash, filename}`. Resolved `src` values are
   transient and must never be written to YAML.
+- Image content has an optional URL-widget link accepting absolute HTTP(S)
+  destinations or stable `pages` identities. The read adapter exposes
+  `{url, link}`, and rendering derives a current base-aware page URL only from
+  exact resolved metadata. The image frame is linked while its caption remains
+  outside. Missing, hidden, malformed, mismatched, and shortcut targets remain
+  unlinked; `minicms://` must never reach public HTML.
 - Hidden nodes remain selectable in authoring but are absent publicly.
 - PDF viewer canvases have a matching PDF.js text layer at CSS resolution so
   rendered document text remains selectable. Rebuild and cancel both layers
