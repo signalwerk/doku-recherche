@@ -53,6 +53,7 @@ function initializePdfViewer(root: HTMLElement, source: string): ViewerControlle
     ...root.querySelectorAll<HTMLElement>("[data-pdf-text-layer]")
   ];
   const controls = element<HTMLElement>(root, ".pdf-viewer__controls");
+  const loading = element<HTMLElement>(root, "[data-pdf-loading]");
   const previous = element<HTMLButtonElement>(root, "[data-pdf-previous]");
   const next = element<HTMLButtonElement>(root, "[data-pdf-next]");
   const status = element<HTMLElement>(root, "[data-pdf-status]");
@@ -65,6 +66,11 @@ function initializePdfViewer(root: HTMLElement, source: string): ViewerControlle
   let textLayers: TextLayer[] = [];
   let resizeTimer = 0;
   let destroyed = false;
+
+  function setLoading(isLoading: boolean) {
+    loading.hidden = !isLoading;
+    root.setAttribute("aria-busy", String(isLoading));
+  }
 
   function cancelRendering() {
     renderGeneration += 1;
@@ -143,6 +149,7 @@ function initializePdfViewer(root: HTMLElement, source: string): ViewerControlle
     if (!document || destroyed) return;
     const currentDocument = document;
     cancelRendering();
+    setLoading(true);
     const generation = renderGeneration;
     const pages = spreadPages(spreadStart, document.numPages);
     stage.dataset.pageCount = String(pages.length);
@@ -195,10 +202,14 @@ function initializePdfViewer(root: HTMLElement, source: string): ViewerControlle
             : Promise.resolve();
         })
       );
+      if (!destroyed && generation === renderGeneration) setLoading(false);
     } catch (error) {
       if (destroyed || generation !== renderGeneration) return;
       if (error instanceof Error && error.name === "RenderingCancelledException") return;
-      if (!destroyed) message.textContent = "Die PDF-Seiten konnten nicht dargestellt werden.";
+      if (!destroyed) {
+        setLoading(false);
+        message.textContent = "Die PDF-Seiten konnten nicht dargestellt werden.";
+      }
     }
   }
 
@@ -263,6 +274,7 @@ function initializePdfViewer(root: HTMLElement, source: string): ViewerControlle
     },
     () => {
       if (!destroyed) {
+        setLoading(false);
         message.textContent = "Das PDF konnte nicht geladen werden.";
         status.textContent = "PDF nicht verfügbar";
       }

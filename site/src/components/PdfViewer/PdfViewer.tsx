@@ -49,12 +49,17 @@ export default function PdfViewer({
       data-pdf-viewer=""
       data-pdf-src={pdf.src ?? undefined}
       aria-label={pdf.title}
+      aria-busy={pdf.src ? true : undefined}
       tabIndex={pdf.src ? 0 : undefined}
       {...authoringProps}
     >
       {pdf.src ? (
         <>
           <div className="pdf-viewer__stage" data-pdf-stage="" data-page-count="1">
+            <div className="pdf-viewer__loading" data-pdf-loading="" role="status">
+              <span className="pdf-viewer__spinner" aria-hidden="true" />
+              <span className="visually-hidden">PDF wird geladen…</span>
+            </div>
             <div className="pdf-viewer__page" data-pdf-page-frame="">
               <canvas data-pdf-canvas="" aria-label="Seite 1" />
               <div
@@ -72,9 +77,7 @@ export default function PdfViewer({
               />
             </div>
           </div>
-          <p className="pdf-viewer__message" data-pdf-message="" role="status">
-            PDF wird geladen…
-          </p>
+          <p className="pdf-viewer__message" data-pdf-message="" role="status" />
           <div className="pdf-viewer__controls" aria-label="PDF-Navigation">
             <button type="button" data-pdf-previous="" disabled>
               Zurück

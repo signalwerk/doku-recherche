@@ -65,6 +65,25 @@ test("the viewer keeps navigation minimal without an external PDF button", async
   assert.doesNotMatch(component, /PDF öffnen/);
 });
 
+test("the viewer shows a reduced-motion-safe spinner while rendering", async () => {
+  const directory = path.resolve(
+    path.dirname(fileURLToPath(import.meta.url)),
+    "../src/components/PdfViewer"
+  );
+  const [component, client, styles] = await Promise.all([
+    readFile(path.join(directory, "PdfViewer.tsx"), "utf8"),
+    readFile(path.join(directory, "client.ts"), "utf8"),
+    readFile(path.join(directory, "PdfViewer.scss"), "utf8")
+  ]);
+
+  assert.match(component, /data-pdf-loading=/);
+  assert.match(component, /aria-busy=/);
+  assert.match(client, /loading\.hidden = !isLoading;/);
+  assert.match(client, /root\.setAttribute\("aria-busy", String\(isLoading\)\);/);
+  assert.match(styles, /@keyframes pdf-viewer-spin/);
+  assert.match(styles, /@media \(prefers-reduced-motion: reduce\)/);
+});
+
 test("paired pages touch with one grey divider inside a black outline", async () => {
   const styles = await readFile(
     path.resolve(
