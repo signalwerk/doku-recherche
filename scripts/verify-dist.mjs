@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url";
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const outputRoot = path.join(projectRoot, "dist");
 const bibliographyHash = "39d466ebb60819060b79de3cd2d31c5d9bfd670b6664de2a947657c10eaf9cd0";
-const bibliographyPath = `media/${bibliographyHash}/zwei-verlage.pdf`;
+const bibliographyPath = `content/media/${bibliographyHash}/zwei-verlage.pdf`;
 const required = [
   ".nojekyll",
   "index.html",
