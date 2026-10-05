@@ -19,7 +19,6 @@ function page(
 ): ContentRecord {
   return {
     id: contentId,
-    filename: contentId,
     type: "page",
     order: 0,
     properties: {

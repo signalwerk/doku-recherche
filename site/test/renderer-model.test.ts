@@ -60,7 +60,6 @@ test("resolved image references prefer explicit overrides and retain selections"
       ref: "published-image-id",
       record: {
         id: "published-image",
-        filename: "published-image",
         type: "media_image",
         properties: {
           alt: "Library alternative",

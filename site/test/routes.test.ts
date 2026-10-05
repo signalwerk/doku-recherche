@@ -27,7 +27,6 @@ function record(contentId: string, options: RecordOptions = {}): ContentRecord {
   const type = options.type ?? "page";
   return {
     id: contentId,
-    filename: options.id ?? contentId,
     type,
     order: options.order ?? 0,
     properties: {

@@ -4,6 +4,7 @@ import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
+import { recordIdFromFileStem } from "../../miniCMS/core/slug.js";
 
 import type { CmsConfig, UnknownMapping } from "@signalwerk/minicms/content";
 
@@ -82,10 +83,10 @@ test("all content identities follow the project ID specification", async () => {
         await readFile(path.join(projectRoot, location), "utf8")
       );
       visitIdentities(record, location, definitions, references);
-      assert.match(
-        path.basename(entry.name, `.${extension}`),
-        ID_PATTERN,
-        `${location} filename must match ${ID_PATTERN}`
+      assert.equal(
+        recordIdFromFileStem(path.basename(entry.name, `.${extension}`)),
+        (record as { id: string }).id,
+        `${location} filename must end with its record id`
       );
     }
   }

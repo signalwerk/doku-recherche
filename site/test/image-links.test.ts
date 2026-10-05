@@ -18,7 +18,6 @@ function page(
 ): ContentRecord {
   return {
     id: contentId,
-    filename: contentId,
     type: options.type ?? "page",
     order: 0,
     properties: {

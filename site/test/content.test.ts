@@ -3,6 +3,7 @@ import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
+import { recordIdFromFileStem } from "../../miniCMS/core/slug.js";
 
 import type { CmsConfig, UnknownMapping } from "@signalwerk/minicms/content";
 
@@ -42,9 +43,9 @@ test("the source config and every committed record pass shared validation", asyn
       const record = parseYaml(source);
       validateRecord(record, collection, config);
       assert.equal(
-        (record as { filename: string }).filename,
-        path.basename(entry.name, `.${extension}`),
-        `${folder}/${entry.name} must store its filename stem`
+        recordIdFromFileStem(path.basename(entry.name, `.${extension}`)),
+        (record as { id: string }).id,
+        `${folder}/${entry.name} must end with its record id`
       );
       recordCount += 1;
     }

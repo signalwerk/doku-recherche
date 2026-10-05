@@ -59,8 +59,9 @@ required.
   Missing, hidden, malformed, or shortcut targets render as non-links and the
   custom scheme must never reach public HTML.
 - Generate every ID with `createId()` from `miniCMS/core/id.js`. Each record
-  stores an opaque `id` matching `^[a-z0-9]{15}$` plus a readable `filename`
-  that must equal its YAML filename stem (renames change only `filename`).
+  stores an opaque `id` matching `^[a-z0-9]{15}$`; its file is named
+  `<slug>-<id>.yml` from the collection slug template, or `<id>.yml` without
+  one (`images` has no slug).
   Every opaque identity—each record `id`, every nested node or image-annotation `id`, tag
   ID, and any relation or hierarchy value targeting one of those
   identities—must follow the same pattern. Generated identity definitions
