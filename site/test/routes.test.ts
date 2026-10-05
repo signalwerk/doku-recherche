@@ -26,11 +26,11 @@ type RecordOptions = {
 function record(contentId: string, options: RecordOptions = {}): ContentRecord {
   const type = options.type ?? "page";
   return {
-    id: options.id ?? contentId,
+    id: contentId,
+    filename: options.id ?? contentId,
     type,
     order: options.order ?? 0,
     properties: {
-      content_id: contentId,
       parent_id: options.parent ?? null,
       title: contentId,
       slug: options.slug ?? contentId,
@@ -82,7 +82,7 @@ test("fails when a hierarchy cycle prevents route construction", () => {
 test("fails when a parent is missing", () => {
   assert.throws(
     () => buildRouteManifest([record("orphan", { parent: "absent" })]),
-    /missing parent content_id "absent"/i
+    /missing parent id "absent"/i
   );
 });
 

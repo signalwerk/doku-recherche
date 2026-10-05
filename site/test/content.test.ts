@@ -42,9 +42,9 @@ test("the source config and every committed record pass shared validation", asyn
       const record = parseYaml(source);
       validateRecord(record, collection, config);
       assert.equal(
-        (record as { id: string }).id,
+        (record as { filename: string }).filename,
         path.basename(entry.name, `.${extension}`),
-        `${folder}/${entry.name} must use its record id as the filename`
+        `${folder}/${entry.name} must store its filename stem`
       );
       recordCount += 1;
     }

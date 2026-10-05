@@ -39,7 +39,7 @@ if (route.kind === "redirect") {
 }
 
 const data = repository.pages.find(
-  (page) => page.item.properties.content_id === route.contentId
+  (page) => page.item.id === route.contentId
 );
 if (!data) {
   throw new Error(`No resolved content envelope exists for route ${routePath}`);

@@ -9,8 +9,6 @@ connectors:
 site:
   name: Dokumentationsstelle für historische Recherchen
   locale: de-CH
-  media_folder: content/media
-  public_folder: /media
   image_processing:
     width: 2400
     height: 2400
@@ -25,11 +23,6 @@ node_types:
     kind: document
     icon: file-text
     fields:
-      content_id:
-        label: ID
-        widget: id
-        readonly: true
-        required: true
       title:
         label: Title
         widget: string
@@ -121,7 +114,7 @@ node_types:
                 icon: file-text
                 description: System-generated identifiers for this record.
                 fields:
-                  - content_id
+                  - $id
               stored_file:
                 label: Stored file
                 icon: file-text
@@ -146,11 +139,6 @@ node_types:
     kind: document
     icon: file-symlink
     fields:
-      content_id:
-        label: ID
-        widget: id
-        readonly: true
-        required: true
       title:
         label: Title
         widget: string
@@ -175,7 +163,6 @@ node_types:
         label: Target page
         widget: reference
         collection: pages
-        value_field: content_id
         allowed_types:
           - page
         visible_when:
@@ -221,7 +208,7 @@ node_types:
                 icon: file-text
                 description: System-generated identifiers for this record.
                 fields:
-                  - content_id
+                  - $id
               stored_file:
                 label: Stored file
                 icon: file-text
@@ -235,11 +222,6 @@ node_types:
     kind: document
     icon: image
     fields:
-      content_id:
-        label: ID
-        widget: id
-        readonly: true
-        required: true
       alt:
         label: Alternative text
         widget: string
@@ -261,6 +243,7 @@ node_types:
           - .tif
           - .tiff
           - image/svg+xml
+        media_folder: content/media
       caption:
         label: Caption
         widget: text
@@ -269,11 +252,6 @@ node_types:
     kind: document
     icon: file-text
     fields:
-      content_id:
-        label: ID
-        widget: id
-        readonly: true
-        required: true
       title:
         label: Title
         widget: string
@@ -284,6 +262,7 @@ node_types:
         required: true
         accept:
           - "*/*"
+        media_folder: content/media
       description:
         label: Description
         widget: text
@@ -307,7 +286,7 @@ node_types:
                 label: Identity
                 icon: file-text
                 fields:
-                  - content_id
+                  - $id
               stored_file:
                 label: Stored file
                 icon: file-text
@@ -630,7 +609,6 @@ collections:
       - shortcut
     hierarchy:
       enabled: true
-      id_field: content_id
       parent_field: parent_id
       allowed_child_types:
         - page
@@ -640,7 +618,6 @@ collections:
       list:
         type: tree
       reference:
-        value: content_id
         title: title
         description:
           - slug
@@ -680,7 +657,6 @@ collections:
           - field: alt
             mode: read
       reference:
-        value: content_id
         image: file
         title: title
         description:
@@ -749,7 +725,6 @@ collections:
             appearance: muted
             width: 11rem
       reference:
-        value: content_id
         title: title
         description:
           - file

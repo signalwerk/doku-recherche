@@ -29,15 +29,29 @@ export function staticOutputIntegration(projectRoot: string): AstroIntegration {
         const config = await readSourceConfig(projectRoot);
         if (config.connectors.default.name !== "github") return;
 
-        const source = path.join(projectRoot, "content", "media");
-        const destination = path.join(outputDirectory, "media");
-        await cp(source, destination, {
-          recursive: true,
-          force: true,
-          errorOnExist: false
-        }).catch((error: NodeJS.ErrnoException) => {
-          if (error.code !== "ENOENT") throw error;
-        });
+        // GitHub media values are repository paths below each upload field's
+        // media_folder; serve them at the same path below the site base.
+        const mediaFolders = new Set(
+          Object.values(config.node_types).flatMap((type: any) =>
+            typeof type.connector === "string"
+              ? []
+              : Object.values<any>(type.fields ?? {}).flatMap((field) =>
+                  ["image", "file"].includes(field.widget) &&
+                  typeof field.media_folder === "string"
+                    ? [field.media_folder]
+                    : []
+                )
+          )
+        );
+        for (const folder of mediaFolders) {
+          await cp(
+            path.join(projectRoot, folder),
+            path.join(outputDirectory, folder),
+            { recursive: true, force: true, errorOnExist: false }
+          ).catch((error: NodeJS.ErrnoException) => {
+            if (error.code !== "ENOENT") throw error;
+          });
+        }
       }
     }
   };

@@ -173,9 +173,8 @@ export function resolvedPageLinkPath(
 
   for (const record of records) {
     if (record.type !== "page" && record.type !== "shortcut") return null;
-    const rawContentId = record.properties.content_id;
-    if (typeof rawContentId !== "string" || !rawContentId.trim()) return null;
-    const currentContentId = rawContentId.trim();
+    const currentContentId = record.id;
+    if (!currentContentId) return null;
     if (seen.has(currentContentId)) return null;
 
     const rawParent = record.properties.parent_id;
@@ -199,10 +198,7 @@ export function resolvedPageLinkPath(
     expectedParent = currentContentId;
   }
 
-  const targetContentId = link.record.properties.content_id;
-  if (typeof targetContentId !== "string" || targetContentId.trim() !== link.ref) {
-    return null;
-  }
+  if (link.record.id !== link.ref) return null;
   return routePath(segments);
 }
 
@@ -218,7 +214,7 @@ export function resolvedPageLinkHref(
 }
 
 function contentId(record: ContentRecord): string {
-  return stringProperty(record, "content_id").trim();
+  return record.id;
 }
 
 function parentContentId(record: ContentRecord): string | null {
@@ -265,10 +261,7 @@ function selectedTargetId(record: ContentRecord): string | null {
     if (ref) return ref;
   }
 
-  const resolvedId = reference.record?.properties.content_id;
-  return typeof resolvedId === "string" && resolvedId.trim()
-    ? resolvedId.trim()
-    : null;
+  return reference.record?.id || null;
 }
 
 /**
@@ -296,7 +289,7 @@ export function buildRouteManifest(
     const duplicate = nodesById.get(node.contentId);
     if (duplicate) {
       fail(
-        `Duplicate hierarchy content_id "${node.contentId}" on route records "${duplicate.record.id}" and "${node.record.id}".`
+        `Duplicate hierarchy record id "${node.contentId}" on route records "${duplicate.record.id}" and "${node.record.id}".`
       );
     }
     nodesById.set(node.contentId, node);
@@ -307,7 +300,7 @@ export function buildRouteManifest(
     const parent = nodesById.get(node.parentContentId);
     if (!parent) {
       fail(
-        `Route record "${node.record.id}" references missing parent content_id "${node.parentContentId}".`
+        `Route record "${node.record.id}" references missing parent id "${node.parentContentId}".`
       );
     }
     node.parent = parent;
@@ -402,7 +395,7 @@ export function buildRouteManifest(
       directTarget = nodesById.get(targetId);
       if (!directTarget) {
         fail(
-          `Shortcut "${node.record.id}" targets missing content_id "${targetId}".`
+          `Shortcut "${node.record.id}" targets missing id "${targetId}".`
         );
       }
       if (!directTarget.public) {

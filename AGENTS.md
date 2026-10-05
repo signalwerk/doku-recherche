@@ -50,24 +50,27 @@ required.
   paths and inlines them into the preview bundle. Body copy uses the shared
   `--body-font-size`; list-item text and accordion-summary text both begin
   `1.5em` from their common left edge at that font size.
-- Public routes are derived from `content_id`, `parent_id`, and `slug`. Route
+- Public routes are derived from the record `id`, `parent_id`, and `slug`. Route
   hierarchy errors and duplicate paths must fail the build.
-- Markdown content links persist only the stable page `content_id` as
+- Markdown content links persist only the stable page record `id` as
   `minicms://link/pages/<id>`. Static pages and the live preview derive the
   current base-aware URL from the resolved target and its root-to-parent
   hierarchy, so moving or renaming a page does not change stored Markdown.
   Missing, hidden, malformed, or shortcut targets render as non-links and the
   custom scheme must never reach public HTML.
-- Keep the two miniCMS ID categories distinct, but generate both with
-  `createId()` from `miniCMS/core/id.js`. Every record's top-level `id` must
-  match `^[a-z0-9]{15}$` and equal its YAML filename stem. Every opaque
-  identity—each `content_id`, every nested node or image-annotation `id`, tag
+- Generate every ID with `createId()` from `miniCMS/core/id.js`. Each record
+  stores an opaque `id` matching `^[a-z0-9]{15}$` plus a readable `filename`
+  that must equal its YAML filename stem (renames change only `filename`).
+  Every opaque identity—each record `id`, every nested node or image-annotation `id`, tag
   ID, and any relation or hierarchy value targeting one of those
   identities—must follow the same pattern. Generated identity definitions
   must be globally unique; references deliberately reuse an existing
   identity. Never invent any ID from a title, slug, date, counter, or UUID.
 - Persist image identity as `{hash, filename}`. Resolved `src` values are
-  transient and must never be written to YAML.
+  transient and must never be written to YAML. Each image/file field declares
+  its own `media_folder` (`content/media`); there is no site-level media or
+  public folder. GitHub media values resolve to that repository path, and the
+  static build copies each local media folder to the same path in `dist/`.
 - Image content has an optional URL-widget link accepting absolute HTTP(S)
   destinations or stable `pages` identities. The read adapter exposes
   `{url, link}`, and rendering derives a current base-aware page URL only from
